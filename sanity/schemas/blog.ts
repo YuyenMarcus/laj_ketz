@@ -18,6 +18,7 @@ const blog = defineType({
         source: "title",
         maxLength: 96,
       },
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: "author",

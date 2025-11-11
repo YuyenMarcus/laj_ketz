@@ -4,6 +4,16 @@ const analysis = {
   type: "document",
   fields: [
     { name: "title", type: "string", title: "Title" },
+    {
+      name: "slug",
+      type: "slug",
+      title: "Slug",
+      options: {
+        source: "title",
+        maxLength: 96,
+      },
+      validation: (Rule) => Rule.required(),
+    },
     { name: "date", type: "datetime", title: "Date" },
     { name: "summary", type: "text", title: "Summary" },
     {
