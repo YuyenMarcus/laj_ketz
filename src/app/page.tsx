@@ -1,10 +1,10 @@
 import LajKetzHome from "../components/LajKetzHome";
-import { getAnalyses } from "@/lib/getAnalyses";
-import type { AnalysisDocument } from "@/lib/getAnalyses";
-import { getBlogs } from "@/lib/getBlogs";
-import type { BlogDocument } from "@/lib/getBlogs";
-import { getVlogs } from "@/lib/getVlogs";
-import type { VlogDocument } from "@/lib/getVlogs";
+import { getAnalyses } from "../../lib/getAnalyses";
+import type { AnalysisDocument } from "../../lib/getAnalyses";
+import { getBlogs } from "../../lib/getBlogs";
+import type { BlogDocument } from "../../lib/getBlogs";
+import { getVlogs } from "../../lib/getVlogs";
+import type { VlogDocument } from "../../lib/getVlogs";
 
 const mockHero = {
   title: "La selva respira: cada scroll revela su lucha.",
