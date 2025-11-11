@@ -288,7 +288,7 @@ const partnerLogos = [
 
 const ICONS = ["🌳", "🛡️", "🦜"];
 
-export const revalidate = 3600;
+export const revalidate = 60;
 
 function formatDate(value: string | undefined, locale: string) {
   if (!value) return undefined;
