@@ -25,7 +25,13 @@
       {
         "name": "next"
       }
-    ]
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@/lib/*": ["lib/*"],
+      "@/sanity/*": ["sanity/*"]
+    }
   },
   "include": [
     "next-env.d.ts",
