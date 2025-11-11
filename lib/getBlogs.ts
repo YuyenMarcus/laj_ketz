@@ -14,7 +14,7 @@ export type BlogDocument = {
 
 export async function getBlogs(): Promise<BlogDocument[]> {
   const query = `
-    *[_type == "blog" && defined(slug.current)] | order(coalesce(publishedAt, date) desc) {
+    *[_type == "blog"] | order(coalesce(publishedAt, date) desc) {
       _id,
       title,
       author,

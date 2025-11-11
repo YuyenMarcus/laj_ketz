@@ -18,7 +18,7 @@ export type BlogDetailDocument = {
 export async function getBlogBySlug(
   slug: string,
 ): Promise<BlogDetailDocument | null> {
-  const query = `*[_type == "blog" && slug.current == $slug][0]{
+  const query = `*[_type == "blog" && (slug.current == $slug || _id == $slug)][0]{
     _id,
     title,
     author,
