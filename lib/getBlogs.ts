@@ -3,12 +3,13 @@ import { client } from "./sanity.client";
 export type BlogDocument = {
   _id: string;
   title: string;
-  date: string;
+  date?: string;
   author?: string;
   summary?: string;
   tags?: string[];
   thumbnailUrl?: string;
   slug?: string;
+  documentFileUrl?: string;
 };
 
 export async function getBlogs(): Promise<BlogDocument[]> {
@@ -21,7 +22,8 @@ export async function getBlogs(): Promise<BlogDocument[]> {
       summary,
       tags,
       "thumbnailUrl": thumbnail.asset->url,
-      "slug": slug.current
+      "slug": slug.current,
+      "documentFileUrl": documentFile.asset->url
     }
   `;
 

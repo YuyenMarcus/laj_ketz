@@ -34,78 +34,6 @@ const mockHeroEn = {
   },
 };
 
-const mockPosts = [
-  {
-    id: "post-1",
-    title: "Selva Maya 101: lo esencial para jóvenes",
-    excerpt:
-      "Por qué la Selva Maya es clave para el clima, la biodiversidad y las comunidades que la defienden a diario.",
-    slug: "selva-maya-101",
-    image:
-      "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1200&q=80",
-    author: "Equipo Laj Ketz",
-    date: new Date().toISOString(),
-  },
-  {
-    id: "post-2",
-    title: "Cómo fortalecer el ecoturismo comunitario en Petén",
-    excerpt:
-      "Cinco acciones concretas para que el turismo regenere bosque y apoye a guías jóvenes.",
-    slug: "support-community-ecotourism",
-    image:
-      "https://images.unsplash.com/photo-1513836279014-a89f7a76ae86?auto=format&fit=crop&w=1200&q=80",
-    author: "Camila Ajpop",
-    date: new Date().toISOString(),
-  },
-  {
-    id: "post-3",
-    title: "Juventud en patrulla: Sky Patrol Mirador",
-    excerpt:
-      "Conoce al equipo que usa drones y TikTok para resguardar sitios arqueológicos y bordes de selva.",
-    slug: "teen-spotlight-mirador",
-    image:
-      "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80",
-    author: "Diego Ku",
-    date: new Date().toISOString(),
-  },
-];
-
-const mockPostsEn = [
-  {
-    id: "post-en-1",
-    title: "Selva Maya 101: What teens need to know",
-    excerpt:
-      "Why the Selva Maya matters for climate resilience, biodiversity, and community-led stewardship.",
-    slug: "selva-maya-101-en",
-    image:
-      "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1200&q=80",
-    author: "Laj Ketz Team",
-    date: new Date().toISOString(),
-  },
-  {
-    id: "post-en-2",
-    title: "Supporting community ecotourism in Petén",
-    excerpt:
-      "Five actionable steps to keep conservation funding local and amplify youth guides.",
-    slug: "support-community-ecotourism-en",
-    image:
-      "https://images.unsplash.com/photo-1513836279014-a89f7a76ae86?auto=format&fit=crop&w=1200&q=80",
-    author: "Camila Ajpop",
-    date: new Date().toISOString(),
-  },
-  {
-    id: "post-en-3",
-    title: "Teen spotlight: Mirador Sky Patrol",
-    excerpt:
-      "Meet the crew using drones and TikTok to protect archaeological sites and rainforest edges.",
-    slug: "teen-spotlight-mirador-en",
-    image:
-      "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80",
-    author: "Diego Ku",
-    date: new Date().toISOString(),
-  },
-];
-
 const mockAnalyses = [
   {
     id: "analysis-1",
@@ -254,16 +182,30 @@ const mockSnapshotEn = [
   },
 ];
 
-const mockPartners = [
+const partnerLogos = [
   {
     name: "WCS Guatemala",
     logo:
-      "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=400&q=80",
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/WCS_logo.svg/512px-WCS_logo.svg.png",
+    url: "https://guatemala.wcs.org/",
   },
   {
     name: "Rainforest Alliance",
     logo:
-      "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=400&q=80",
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Rainforest_Alliance_logo.svg/512px-Rainforest_Alliance_logo.svg.png",
+    url: "https://www.rainforest-alliance.org/",
+  },
+  {
+    name: "CONAP Guatemala",
+    logo:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/CONAP_logo.svg/512px-CONAP_logo.svg.png",
+    url: "https://www.conap.gob.gt/",
+  },
+  {
+    name: "WWF Mesoamérica",
+    logo:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/WWF_logo.svg/512px-WWF_logo.svg.png",
+    url: "https://www.wwfca.org/",
   },
 ];
 
@@ -327,7 +269,7 @@ export default async function Page() {
         author: blog.author ?? "Laj Ketz",
         date: blog.date ?? new Date().toISOString(),
       }))
-    : mockPosts;
+    : [];
 
   const analysesData = hasAnalyses
     ? analyses.map((analysis: AnalysisDocument) => ({
@@ -397,7 +339,7 @@ export default async function Page() {
       }))
     : mockAnalysesEn;
 
-  const postsEn = hasBlogs ? posts : mockPostsEn;
+  const postsEn = hasBlogs ? posts : [];
 
   const snapshotEn = hasAnalyses
     ? analyses.slice(0, 3).map((analysis: AnalysisDocument, index: number) => ({
@@ -433,7 +375,7 @@ export default async function Page() {
       posts={posts}
       analyses={analysesData}
       videos={videos}
-      partners={mockPartners}
+      partners={partnerLogos}
       snapshot={snapshot}
       timeline={timeline}
       defaultLanguage="es"

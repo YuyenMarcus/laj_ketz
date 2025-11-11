@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import type { ReactNode } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import type { Variants } from "framer-motion";
@@ -86,6 +87,7 @@ type UIStrings = {
     tag: string;
     empty: string;
     readMore: string;
+    seeAll: string;
   };
   vlogSection: {
     title: string;
@@ -186,6 +188,7 @@ type AnalysisData = {
 type PartnerData = {
   name?: string;
   logo?: string;
+  url?: string;
 };
 
 type LanguageContent = {
@@ -224,6 +227,7 @@ const DEFAULT_STRINGS: Record<LanguageKey, UIStrings> = {
       empty:
         "Sin artículos por ahora — conecta tu CMS o añade elementos de ejemplo.",
       readMore: "Leer artículo →",
+      seeAll: "Ver biblioteca completa →",
     },
     vlogSection: {
       title: "Vlog destacado",
@@ -292,6 +296,7 @@ const DEFAULT_STRINGS: Record<LanguageKey, UIStrings> = {
       empty:
         "No posts yet — connect your CMS or add placeholder items.",
       readMore: "Read article →",
+      seeAll: "Browse all stories →",
     },
     vlogSection: {
       title: "Featured field vlog",
@@ -890,6 +895,14 @@ export default function LajKetzHome(props: LajKetzHomeProps = {}) {
           <SectionHeader
             title={strings.postsSection.title}
             subtitle={strings.postsSection.subtitle}
+            action={
+              <Link
+                href="/blog"
+                className="inline-flex items-center gap-2 rounded-full border border-[#2E8B57]/30 px-4 py-2 text-sm font-semibold text-[#2E8B57] transition hover:border-[#2E8B57] hover:bg-[#2E8B57]/10 dark:border-[#6FBF73]/30 dark:text-[#6FBF73] dark:hover:border-[#6FBF73] dark:hover:bg-[#6FBF73]/10"
+              >
+                {strings.postsSection.seeAll}
+              </Link>
+            }
           />
           <span className="inline-flex w-fit items-center gap-2 rounded-full bg-[#2E8B57]/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.25em] text-[#2E8B57]">
             {strings.postsSection.tag}
@@ -1191,27 +1204,47 @@ function PartnersCarousel({
         animate={{ x: ["0%", "-50%"] }}
         transition={{ duration: 24, repeat: Infinity, ease: "linear" }}
       >
-        {marqueePartners.map((partner, idx) => (
-          <div
-            key={`${partner?.name ?? "partner"}-${idx}`}
-            className="flex min-w-[160px] items-center gap-3 rounded-xl border border-[#6FBF73]/20 bg-white/90 px-5 py-3 shadow-sm dark:border-[#6FBF73]/30 dark:bg-[#04150c]"
-          >
-            {partner?.logo ? (
-              <Image
-                src={partner.logo}
-                alt={`${partner?.name ?? "Partner"} logo`}
-                width={56}
-                height={40}
-                className="h-10 w-auto object-contain"
-              />
-            ) : (
-              <div className="h-10 w-14 rounded bg-neutral-100 dark:bg-white/10" />
-            )}
-            <span className="text-sm font-semibold text-[#0F2B1D] dark:text-[#f0efe9]">
-              {partner?.name ?? "Partner"}
-            </span>
-          </div>
-        ))}
+        {marqueePartners.map((partner, idx) => {
+          const key = `${partner?.name ?? "partner"}-${idx}`;
+          const content = (
+            <div className="flex min-w-[160px] items-center gap-3 rounded-xl border border-[#6FBF73]/20 bg-white/90 px-5 py-3 shadow-sm transition hover:border-[#2E8B57]/60 hover:shadow-md dark:border-[#6FBF73]/30 dark:bg-[#04150c] dark:hover:border-[#6FBF73]/60">
+              {partner?.logo ? (
+                <Image
+                  src={partner.logo}
+                  alt={`${partner?.name ?? "Partner"} logo`}
+                  width={56}
+                  height={40}
+                  className="h-10 w-auto object-contain"
+                />
+              ) : (
+                <div className="h-10 w-14 rounded bg-neutral-100 dark:bg-white/10" />
+              )}
+              <span className="text-sm font-semibold text-[#0F2B1D] dark:text-[#f0efe9]">
+                {partner?.name ?? "Partner"}
+              </span>
+            </div>
+          );
+
+          if (partner?.url) {
+            return (
+              <a
+                key={key}
+                href={partner.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group"
+              >
+                {content}
+              </a>
+            );
+          }
+
+          return (
+            <div key={key} className="group">
+              {content}
+            </div>
+          );
+        })}
       </motion.div>
     </div>
   );
@@ -1220,11 +1253,12 @@ function PartnersCarousel({
 type SectionHeaderProps = {
   title: string;
   subtitle?: string;
+  action?: ReactNode;
 };
 
-function SectionHeader({ title, subtitle }: SectionHeaderProps) {
+function SectionHeader({ title, subtitle, action }: SectionHeaderProps) {
   return (
-    <div className="flex items-center justify-between">
+    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
       <div>
         <h2 className="text-2xl font-bold text-[#0F2B1D] dark:text-[#f0efe9]">
           {title}
@@ -1235,6 +1269,7 @@ function SectionHeader({ title, subtitle }: SectionHeaderProps) {
           </p>
         ) : null}
       </div>
+      {action ? <div className="flex-shrink-0">{action}</div> : null}
     </div>
   );
 }
