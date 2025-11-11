@@ -1,0 +1,8 @@
+node_modules/
+.next/
+dist/
+.sanity/
+.env.local
+sanity/dist/
+sanity/node_modules/
+
