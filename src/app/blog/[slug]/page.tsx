@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { PortableText, PortableTextComponents } from "@portabletext/react";
-import { getBlogBySlug } from "../../../lib/getBlogBySlug";
+import { getBlogBySlug } from "../../../../lib/getBlogBySlug";
 
 type BlogPageProps = {
   params: {

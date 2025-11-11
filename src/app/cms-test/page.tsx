@@ -1,6 +1,6 @@
-import { getAnalyses } from "../../lib/getAnalyses";
-import { getBlogs } from "../../lib/getBlogs";
-import { getVlogs } from "../../lib/getVlogs";
+import { getAnalyses } from "../../../lib/getAnalyses";
+import { getBlogs } from "../../../lib/getBlogs";
+import { getVlogs } from "../../../lib/getVlogs";
 
 export default async function CmsTestPage() {
   const analyses = await getAnalyses();
