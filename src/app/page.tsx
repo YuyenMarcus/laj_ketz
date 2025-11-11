@@ -314,30 +314,32 @@ export default async function Page() {
   const hasBlogs = blogs.length > 0;
   const hasVlogs = vlogs.length > 0;
 
-  const heroCandidate = analyses.find(
-    (analysis) => (analysis.summary?.trim().length ?? 0) > 80,
-  );
-
-  const mappedPosts = blogs.map((blog: BlogDocument) => ({
-    id: blog._id,
-    title: blog.title,
-    excerpt:
-      blog.summary?.trim().length ? blog.summary : "Resumen en redacción — vuelve pronto.",
-    slug: blog.slug ?? blog._id,
-    image:
-      blog.thumbnailUrl ??
-      "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80",
-    author: blog.author ?? "Laj Ketz",
-    date: blog.date ?? new Date().toISOString(),
-  }));
+  const mappedPosts = blogs
+    .filter((blog: BlogDocument) => Boolean(blog.slug))
+    .map((blog: BlogDocument) => ({
+      id: blog._id,
+      title: blog.title,
+      excerpt:
+        blog.summary?.trim().length ? blog.summary : "Resumen en redacción — vuelve pronto.",
+      slug: blog.slug!,
+      image:
+        blog.thumbnailUrl ??
+        "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80",
+      author: blog.author ?? "Laj Ketz",
+      date: blog.date ?? new Date().toISOString(),
+    }));
 
   const posts = mappedPosts.length > 0 ? mappedPosts : mockPosts;
+
+  const heroCandidate = analyses.find(
+    (analysis) => (analysis.summary?.trim().length ?? 0) > 80 && analysis.slug,
+  );
 
   const hero = heroCandidate
     ? {
         title: heroCandidate.title ?? mockHero.title,
         subtitle: heroCandidate.summary!,
-        ctaUrl: `/analysis/${heroCandidate._id}`,
+        ctaUrl: `/analysis/${heroCandidate.slug}`,
         ctaText: "Leer el análisis de esta semana",
         backgroundImage: "/hero.jpg",
         stats: {
@@ -355,17 +357,19 @@ export default async function Page() {
     : mockHero;
 
   const analysesData = hasAnalyses
-    ? analyses.map((analysis: AnalysisDocument) => ({
-        id: analysis._id,
-        range:
-          formatDate(analysis.date, "es-GT") ?? "Fecha no disponible",
-        title: analysis.title,
-        summary:
-          analysis.summary?.trim().length
-            ? analysis.summary!
-            : FALLBACK_ANALYSIS_SUMMARY_ES,
-        slug: analysis._id,
-      }))
+    ? analyses
+        .filter((analysis: AnalysisDocument) => Boolean(analysis.slug))
+        .map((analysis: AnalysisDocument) => ({
+          id: analysis._id,
+          range:
+            formatDate(analysis.date, "es-GT") ?? "Fecha no disponible",
+          title: analysis.title,
+          summary:
+            analysis.summary?.trim().length
+              ? analysis.summary!
+              : FALLBACK_ANALYSIS_SUMMARY_ES,
+          slug: analysis.slug!,
+        }))
     : mockAnalyses;
 
   const videos = hasVlogs
@@ -379,40 +383,46 @@ export default async function Page() {
     : mockVideos;
 
   const snapshotRaw = hasAnalyses
-    ? analyses.slice(0, 3).map((analysis: AnalysisDocument, index: number) => ({
-        id: analysis._id,
-        label: analysis.title ?? `Análisis ${index + 1}`,
-        value:
-          analysis.forestLoss != null
-            ? `${analysis.forestLoss} ha impactadas`
-            : FALLBACK_ANALYSIS_SUMMARY_ES,
-        trend:
-          analysis.activeAlerts != null
-            ? `${analysis.activeAlerts} alertas activas`
-            : FALLBACK_ANALYSIS_SUMMARY_ES,
-        direction: "flat" as const,
-        description:
-          analysis.summary?.trim().length
-            ? analysis.summary!
-            : FALLBACK_ANALYSIS_SUMMARY_ES,
-        icon: ICONS[index % ICONS.length],
-      }))
+    ? analyses
+        .filter((analysis): analysis is AnalysisDocument & { slug: string } => Boolean(analysis.slug))
+        .slice(0, 3)
+        .map((analysis: AnalysisDocument, index: number) => ({
+          id: analysis._id,
+          label: analysis.title ?? `Análisis ${index + 1}`,
+          value:
+            analysis.forestLoss != null
+              ? `${analysis.forestLoss} ha impactadas`
+              : FALLBACK_ANALYSIS_SUMMARY_ES,
+          trend:
+            analysis.activeAlerts != null
+              ? `${analysis.activeAlerts} alertas activas`
+              : FALLBACK_ANALYSIS_SUMMARY_ES,
+          direction: "flat" as const,
+          description:
+            analysis.summary?.trim().length
+              ? analysis.summary!
+              : FALLBACK_ANALYSIS_SUMMARY_ES,
+          icon: ICONS[index % ICONS.length],
+        }))
+    : [];
+
+  const timelineRaw = hasAnalyses
+    ? analyses
+        .filter((analysis): analysis is AnalysisDocument & { slug: string } => Boolean(analysis.slug))
+        .slice(0, 3)
+        .map((analysis: AnalysisDocument, index: number) => ({
+          label: analysis.title ?? `Historia ${index + 1}`,
+          change:
+            analysis.summary?.trim().length
+              ? analysis.summary!
+              : FALLBACK_ANALYSIS_SUMMARY_ES,
+          direction: "flat" as const,
+        }))
     : [];
 
   const snapshot = snapshotRaw.length
     ? [...snapshotRaw, ...mockSnapshot].slice(0, 3)
     : mockSnapshot;
-
-  const timelineRaw = hasAnalyses
-    ? analyses.slice(0, 3).map((analysis: AnalysisDocument, index: number) => ({
-        label: analysis.title ?? `Historia ${index + 1}`,
-        change:
-          analysis.summary?.trim().length
-            ? analysis.summary!
-            : FALLBACK_ANALYSIS_SUMMARY_ES,
-        direction: "flat" as const,
-      }))
-    : [];
 
   const timeline = timelineRaw.length
     ? [...timelineRaw, ...mockTimeline].slice(0, 3)
@@ -422,7 +432,7 @@ export default async function Page() {
     ? {
         title: heroCandidate.title ?? mockHeroEn.title,
         subtitle: heroCandidate.summary!,
-        ctaUrl: `/analysis/${heroCandidate._id}`,
+        ctaUrl: `/analysis/${heroCandidate.slug}`,
         ctaText: "Read this week's analysis",
         backgroundImage: "/hero.jpg",
         stats: hero.stats,
@@ -430,54 +440,58 @@ export default async function Page() {
     : mockHeroEn;
 
   const analysesEn = hasAnalyses
-    ? analyses.map((analysis: AnalysisDocument) => ({
-        id: analysis._id,
-        range: formatDate(analysis.date, "en-US") ?? "Date unavailable",
-        title: analysis.title,
-        summary:
-          analysis.summary?.trim().length
-            ? analysis.summary!
-            : FALLBACK_ANALYSIS_SUMMARY_EN,
-        slug: analysis._id,
-      }))
+    ? analyses
+        .filter((analysis: AnalysisDocument) => Boolean(analysis.slug))
+        .map((analysis: AnalysisDocument) => ({
+          id: analysis._id,
+          range: formatDate(analysis.date, "en-US") ?? "Date unavailable",
+          title: analysis.title,
+          summary:
+            analysis.summary?.trim().length
+              ? analysis.summary!
+              : FALLBACK_ANALYSIS_SUMMARY_EN,
+          slug: analysis.slug!,
+        }))
     : mockAnalysesEn;
 
   const postsEn = mappedPosts.length > 0 ? mappedPosts : mockPostsEn;
 
   const snapshotEnRaw = hasAnalyses
-    ? analyses.slice(0, 3).map((analysis: AnalysisDocument, index: number) => ({
-        id: analysis._id,
-        label: analysis.title ?? `Story ${index + 1}`,
-        value:
-          analysis.forestLoss != null
-            ? `${analysis.forestLoss} ha lost`
-            : FALLBACK_ANALYSIS_SUMMARY_EN,
-        trend:
-          analysis.activeAlerts != null
-            ? `${analysis.activeAlerts} active alerts`
-            : FALLBACK_ANALYSIS_SUMMARY_EN,
-        direction: "flat" as const,
-        description:
-          analysis.summary?.trim().length
-            ? analysis.summary!
-            : FALLBACK_ANALYSIS_SUMMARY_EN,
-        icon: ICONS[index % ICONS.length],
-      }))
+    ? analyses
+        .filter((analysis): analysis is AnalysisDocument & { slug: string } => Boolean(analysis.slug))
+        .slice(0, 3)
+        .map((analysis: AnalysisDocument, index: number) => ({
+          id: analysis._id,
+          label: analysis.title ?? `Story ${index + 1}`,
+          value:
+            analysis.forestLoss != null
+              ? `${analysis.forestLoss} ha lost`
+              : FALLBACK_ANALYSIS_SUMMARY_EN,
+          trend:
+            analysis.activeAlerts != null
+              ? `${analysis.activeAlerts} active alerts`
+              : FALLBACK_ANALYSIS_SUMMARY_EN,
+          direction: "flat" as const,
+          description:
+            analysis.summary?.trim().length
+              ? analysis.summary!
+              : FALLBACK_ANALYSIS_SUMMARY_EN,
+          icon: ICONS[index % ICONS.length],
+        }))
     : [];
 
-  const snapshotEn = snapshotEnRaw.length
-    ? [...snapshotEnRaw, ...mockSnapshotEn].slice(0, 3)
-    : mockSnapshotEn;
-
   const timelineEnRaw = hasAnalyses
-    ? analyses.slice(0, 3).map((analysis: AnalysisDocument, index: number) => ({
-        label: analysis.title ?? `Story ${index + 1}`,
-        change:
-          analysis.summary?.trim().length
-            ? analysis.summary!
-            : FALLBACK_ANALYSIS_SUMMARY_EN,
-        direction: "flat" as const,
-      }))
+    ? analyses
+        .filter((analysis): analysis is AnalysisDocument & { slug: string } => Boolean(analysis.slug))
+        .slice(0, 3)
+        .map((analysis: AnalysisDocument, index: number) => ({
+          label: analysis.title ?? `Story ${index + 1}`,
+          change:
+            analysis.summary?.trim().length
+              ? analysis.summary!
+              : FALLBACK_ANALYSIS_SUMMARY_EN,
+          direction: "flat" as const,
+        }))
     : [];
 
   const timelineEn = timelineEnRaw.length
@@ -485,6 +499,10 @@ export default async function Page() {
     : mockTimelineEn;
 
   const videosEn = hasVlogs ? videos : mockVideosEn;
+
+  const snapshotEn = snapshotEnRaw.length
+    ? [...snapshotEnRaw, ...mockSnapshotEn].slice(0, 3)
+    : mockSnapshotEn;
 
   return (
     <LajKetzHome

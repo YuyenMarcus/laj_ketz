@@ -3,6 +3,7 @@ import { client } from "./sanity.client";
 export type AnalysisDocument = {
   _id: string;
   title: string;
+  slug?: string;
   date: string;
   summary?: string;
   forestLoss?: number;
@@ -15,6 +16,7 @@ export async function getAnalyses(): Promise<AnalysisDocument[]> {
     *[_type == "analysis"] | order(date desc) {
       _id,
       title,
+      "slug": slug.current,
       date,
       summary,
       forestLoss,
