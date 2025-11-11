@@ -1277,7 +1277,7 @@ function PostCard({
       whileHover={{ y: -8, scale: 1.01 }}
       transition={{ type: "spring", stiffness: 220, damping: 20 }}
     >
-      <Link href={slug ? `/post/${slug}` : "#"} className="block">
+      <Link href={slug ? `/blog/${slug}` : "#"} className="block">
         <div className="relative h-48 w-full overflow-hidden">
           {image ? (
             <Image

@@ -13,15 +13,15 @@ export type BlogDocument = {
 
 export async function getBlogs(): Promise<BlogDocument[]> {
   const query = `
-    *[_type == "blog"] | order(date desc) {
+    *[_type == "blog" && defined(slug.current)] | order(coalesce(publishedAt, date) desc) {
       _id,
       title,
-      date,
       author,
+      "date": coalesce(publishedAt, date),
       summary,
       tags,
-      "slug": slug.current,
-      "thumbnailUrl": thumbnail.asset->url
+      "thumbnailUrl": thumbnail.asset->url,
+      "slug": slug.current
     }
   `;
 
