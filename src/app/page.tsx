@@ -34,6 +34,78 @@ const mockHeroEn = {
   },
 };
 
+const mockPosts = [
+  {
+    id: "post-1",
+    title: "Selva Maya 101: lo esencial para jóvenes",
+    excerpt:
+      "Por qué la Selva Maya es clave para el clima, la biodiversidad y las comunidades que la defienden a diario.",
+    slug: "selva-maya-101",
+    image:
+      "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1200&q=80",
+    author: "Equipo Laj Ketz",
+    date: new Date().toISOString(),
+  },
+  {
+    id: "post-2",
+    title: "Cómo fortalecer el ecoturismo comunitario en Petén",
+    excerpt:
+      "Cinco acciones concretas para que el turismo regenere bosque y apoye a guías jóvenes.",
+    slug: "support-community-ecotourism",
+    image:
+      "https://images.unsplash.com/photo-1513836279014-a89f7a76ae86?auto=format&fit=crop&w=1200&q=80",
+    author: "Camila Ajpop",
+    date: new Date().toISOString(),
+  },
+  {
+    id: "post-3",
+    title: "Juventud en patrulla: Sky Patrol Mirador",
+    excerpt:
+      "Conoce al equipo que usa drones y TikTok para resguardar sitios arqueológicos y bordes de selva.",
+    slug: "teen-spotlight-mirador",
+    image:
+      "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80",
+    author: "Diego Ku",
+    date: new Date().toISOString(),
+  },
+];
+
+const mockPostsEn = [
+  {
+    id: "post-en-1",
+    title: "Selva Maya 101: What teens need to know",
+    excerpt:
+      "Why the Selva Maya matters for climate resilience, biodiversity, and community-led stewardship.",
+    slug: "selva-maya-101-en",
+    image:
+      "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1200&q=80",
+    author: "Laj Ketz Team",
+    date: new Date().toISOString(),
+  },
+  {
+    id: "post-en-2",
+    title: "Supporting community ecotourism in Petén",
+    excerpt:
+      "Five actionable steps to keep conservation funding local and amplify youth guides.",
+    slug: "support-community-ecotourism-en",
+    image:
+      "https://images.unsplash.com/photo-1513836279014-a89f7a76ae86?auto=format&fit=crop&w=1200&q=80",
+    author: "Camila Ajpop",
+    date: new Date().toISOString(),
+  },
+  {
+    id: "post-en-3",
+    title: "Teen spotlight: Mirador Sky Patrol",
+    excerpt:
+      "Meet the crew using drones and TikTok to protect archaeological sites and rainforest edges.",
+    slug: "teen-spotlight-mirador-en",
+    image:
+      "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80",
+    author: "Diego Ku",
+    date: new Date().toISOString(),
+  },
+];
+
 const mockAnalyses = [
   {
     id: "analysis-1",
@@ -182,6 +254,11 @@ const mockSnapshotEn = [
   },
 ];
 
+const FALLBACK_ANALYSIS_SUMMARY_ES =
+  "Actualización en curso — prontamente liberaremos los detalles del campo.";
+const FALLBACK_ANALYSIS_SUMMARY_EN =
+  "Update in progress — full field notes arrive shortly.";
+
 const partnerLogos = [
   {
     name: "WCS Guatemala",
@@ -236,40 +313,46 @@ export default async function Page() {
   const hasAnalyses = analyses.length > 0;
   const hasBlogs = blogs.length > 0;
   const hasVlogs = vlogs.length > 0;
-  const heroAnalysis = analyses[0];
 
-  const hero = hasAnalyses
+  const heroCandidate = analyses.find(
+    (analysis) => (analysis.summary?.trim().length ?? 0) > 80,
+  );
+
+  const mappedPosts = blogs.map((blog: BlogDocument) => ({
+    id: blog._id,
+    title: blog.title,
+    excerpt:
+      blog.summary?.trim().length ? blog.summary : "Resumen en redacción — vuelve pronto.",
+    slug: blog.slug ?? blog._id,
+    image:
+      blog.thumbnailUrl ??
+      "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80",
+    author: blog.author ?? "Laj Ketz",
+    date: blog.date ?? new Date().toISOString(),
+  }));
+
+  const posts = mappedPosts.length > 0 ? mappedPosts : mockPosts;
+
+  const hero = heroCandidate
     ? {
-        title: heroAnalysis?.title ?? mockHero.title,
-        subtitle: heroAnalysis?.summary ?? mockHero.subtitle,
-        ctaUrl: heroAnalysis ? `/analysis/${heroAnalysis._id}` : mockHero.ctaUrl,
+        title: heroCandidate.title ?? mockHero.title,
+        subtitle: heroCandidate.summary!,
+        ctaUrl: `/analysis/${heroCandidate._id}`,
         ctaText: "Leer el análisis de esta semana",
         backgroundImage: "/hero.jpg",
         stats: {
-          forestLoss: heroAnalysis?.forestLoss
-            ? `${heroAnalysis.forestLoss} ha`
-            : "—",
-          alerts: heroAnalysis?.activeAlerts
-            ? `${heroAnalysis.activeAlerts}`
-            : "—",
-          posts: hasBlogs ? blogs.length : mockHero.stats.posts,
+          forestLoss:
+            heroCandidate.forestLoss != null
+              ? `${heroCandidate.forestLoss} ha`
+              : mockHero.stats.forestLoss,
+          alerts:
+            heroCandidate.activeAlerts != null
+              ? `${heroCandidate.activeAlerts}`
+              : mockHero.stats.alerts,
+          posts: mappedPosts.length || mockHero.stats.posts,
         },
       }
     : mockHero;
-
-  const posts = hasBlogs
-    ? blogs.slice(0, 6).map((blog: BlogDocument) => ({
-        id: blog._id,
-        title: blog.title,
-        excerpt: blog.summary ?? "",
-        slug: blog.slug ?? blog._id,
-        image:
-          blog.thumbnailUrl ??
-          "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80",
-        author: blog.author ?? "Laj Ketz",
-        date: blog.date ?? new Date().toISOString(),
-      }))
-    : [];
 
   const analysesData = hasAnalyses
     ? analyses.map((analysis: AnalysisDocument) => ({
@@ -277,7 +360,10 @@ export default async function Page() {
         range:
           formatDate(analysis.date, "es-GT") ?? "Fecha no disponible",
         title: analysis.title,
-        summary: analysis.summary ?? "",
+        summary:
+          analysis.summary?.trim().length
+            ? analysis.summary!
+            : FALLBACK_ANALYSIS_SUMMARY_ES,
         slug: analysis._id,
       }))
     : mockAnalyses;
@@ -285,44 +371,58 @@ export default async function Page() {
   const videos = hasVlogs
     ? vlogs.slice(0, 3).map((vlog: VlogDocument) => ({
         title: vlog.title,
-        excerpt: vlog.summary ?? "",
+        excerpt: vlog.summary ?? "Video disponible próximamente",
         thumbnail: vlog.thumbnailUrl ?? undefined,
         url: vlog.videoUrl ?? "#",
         preview: undefined,
       }))
     : mockVideos;
 
-  const snapshot = hasAnalyses
+  const snapshotRaw = hasAnalyses
     ? analyses.slice(0, 3).map((analysis: AnalysisDocument, index: number) => ({
         id: analysis._id,
         label: analysis.title ?? `Análisis ${index + 1}`,
         value:
           analysis.forestLoss != null
-            ? `${analysis.forestLoss} ha`
-            : analysis.summary ?? "Ver detalles",
+            ? `${analysis.forestLoss} ha impactadas`
+            : FALLBACK_ANALYSIS_SUMMARY_ES,
         trend:
           analysis.activeAlerts != null
             ? `${analysis.activeAlerts} alertas activas`
-            : analysis.summary ?? "",
+            : FALLBACK_ANALYSIS_SUMMARY_ES,
         direction: "flat" as const,
-        description: analysis.summary ?? "",
+        description:
+          analysis.summary?.trim().length
+            ? analysis.summary!
+            : FALLBACK_ANALYSIS_SUMMARY_ES,
         icon: ICONS[index % ICONS.length],
       }))
+    : [];
+
+  const snapshot = snapshotRaw.length
+    ? [...snapshotRaw, ...mockSnapshot].slice(0, 3)
     : mockSnapshot;
 
-  const timeline = hasAnalyses
+  const timelineRaw = hasAnalyses
     ? analyses.slice(0, 3).map((analysis: AnalysisDocument, index: number) => ({
         label: analysis.title ?? `Historia ${index + 1}`,
-        change: analysis.summary ?? "Actualización disponible",
+        change:
+          analysis.summary?.trim().length
+            ? analysis.summary!
+            : FALLBACK_ANALYSIS_SUMMARY_ES,
         direction: "flat" as const,
       }))
+    : [];
+
+  const timeline = timelineRaw.length
+    ? [...timelineRaw, ...mockTimeline].slice(0, 3)
     : mockTimeline;
 
-  const englishHero = hasAnalyses
+  const englishHero = heroCandidate
     ? {
-        title: heroAnalysis?.title ?? mockHeroEn.title,
-        subtitle: heroAnalysis?.summary ?? mockHeroEn.subtitle,
-        ctaUrl: heroAnalysis ? `/analysis/${heroAnalysis._id}` : mockHeroEn.ctaUrl,
+        title: heroCandidate.title ?? mockHeroEn.title,
+        subtitle: heroCandidate.summary!,
+        ctaUrl: `/analysis/${heroCandidate._id}`,
         ctaText: "Read this week's analysis",
         backgroundImage: "/hero.jpg",
         stats: hero.stats,
@@ -334,37 +434,54 @@ export default async function Page() {
         id: analysis._id,
         range: formatDate(analysis.date, "en-US") ?? "Date unavailable",
         title: analysis.title,
-        summary: analysis.summary ?? "",
+        summary:
+          analysis.summary?.trim().length
+            ? analysis.summary!
+            : FALLBACK_ANALYSIS_SUMMARY_EN,
         slug: analysis._id,
       }))
     : mockAnalysesEn;
 
-  const postsEn = hasBlogs ? posts : [];
+  const postsEn = mappedPosts.length > 0 ? mappedPosts : mockPostsEn;
 
-  const snapshotEn = hasAnalyses
+  const snapshotEnRaw = hasAnalyses
     ? analyses.slice(0, 3).map((analysis: AnalysisDocument, index: number) => ({
         id: analysis._id,
         label: analysis.title ?? `Story ${index + 1}`,
         value:
           analysis.forestLoss != null
             ? `${analysis.forestLoss} ha lost`
-            : analysis.summary ?? "See details",
+            : FALLBACK_ANALYSIS_SUMMARY_EN,
         trend:
           analysis.activeAlerts != null
             ? `${analysis.activeAlerts} active alerts`
-            : analysis.summary ?? "",
+            : FALLBACK_ANALYSIS_SUMMARY_EN,
         direction: "flat" as const,
-        description: analysis.summary ?? "",
+        description:
+          analysis.summary?.trim().length
+            ? analysis.summary!
+            : FALLBACK_ANALYSIS_SUMMARY_EN,
         icon: ICONS[index % ICONS.length],
       }))
+    : [];
+
+  const snapshotEn = snapshotEnRaw.length
+    ? [...snapshotEnRaw, ...mockSnapshotEn].slice(0, 3)
     : mockSnapshotEn;
 
-  const timelineEn = hasAnalyses
+  const timelineEnRaw = hasAnalyses
     ? analyses.slice(0, 3).map((analysis: AnalysisDocument, index: number) => ({
         label: analysis.title ?? `Story ${index + 1}`,
-        change: analysis.summary ?? "Update available",
+        change:
+          analysis.summary?.trim().length
+            ? analysis.summary!
+            : FALLBACK_ANALYSIS_SUMMARY_EN,
         direction: "flat" as const,
       }))
+    : [];
+
+  const timelineEn = timelineEnRaw.length
+    ? [...timelineEnRaw, ...mockTimelineEn].slice(0, 3)
     : mockTimelineEn;
 
   const videosEn = hasVlogs ? videos : mockVideosEn;
