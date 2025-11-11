@@ -29,9 +29,18 @@ export default async function BlogIndexPage() {
   return (
     <main className="mx-auto w-full max-w-6xl px-6 py-16 lg:px-8">
       <header className="space-y-4 text-center sm:space-y-5">
-        <span className="inline-flex items-center gap-2 rounded-full bg-[#2E8B57]/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-[#2E8B57]">
-          Archivo de historias
-        </span>
+        <div className="flex flex-col items-center justify-between gap-3 sm:flex-row">
+          <Link
+            href="/"
+            className="text-sm font-semibold text-[#2E8B57] transition hover:text-[#256b45]"
+          >
+            ← Volver a la portada
+          </Link>
+          <span className="inline-flex items-center gap-2 rounded-full bg-[#2E8B57]/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-[#2E8B57]">
+            Archivo de historias
+          </span>
+          <div className="w-[180px]" />
+        </div>
         <h1 className="text-4xl font-extrabold leading-tight text-[#0F2B1D] dark:text-[#f0efe9] sm:text-5xl">
           Historias desde la selva y quienes la defienden
         </h1>

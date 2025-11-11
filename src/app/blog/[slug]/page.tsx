@@ -4,6 +4,8 @@ import Link from "next/link";
 import { PortableText, PortableTextComponents } from "@portabletext/react";
 import { getBlogBySlug } from "../../../../lib/getBlogBySlug";
 
+export const dynamic = "force-dynamic";
+
 type BlogPageProps = {
   params: {
     slug: string;
@@ -103,15 +105,25 @@ export default async function BlogPostPage({ params }: BlogPageProps) {
       })
     : null;
 
+  const pdfUrl = blog.documentFile?.url;
+
   return (
     <article className="mx-auto max-w-3xl space-y-6 px-6 py-12">
       <div className="space-y-3">
-        <Link
-          href="/"
-          className="text-sm font-semibold text-[#2E8B57] transition hover:text-[#256b45]"
-        >
-          ← Volver a la portada
-        </Link>
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+          <Link
+            href="/"
+            className="text-sm font-semibold text-[#2E8B57] transition hover:text-[#256b45]"
+          >
+            ← Volver a la portada
+          </Link>
+          <Link
+            href="/blog"
+            className="text-sm font-semibold text-[#2E8B57] transition hover:text-[#256b45]"
+          >
+            Archivo de historias
+          </Link>
+        </div>
         <h1 className="text-4xl font-bold text-[#0F2B1D] dark:text-[#f0efe9]">
           {blog.title}
         </h1>
@@ -156,32 +168,50 @@ export default async function BlogPostPage({ params }: BlogPageProps) {
         </p>
       ) : null}
 
+      {pdfUrl ? (
+        <div className="space-y-4 rounded-3xl border border-[#6FBF73]/30 bg-white p-6 shadow-lg dark:bg-[#04150c]">
+          <h2 className="text-lg font-semibold text-[#0F2B1D] dark:text-[#f0efe9]">
+            Vista previa del documento
+          </h2>
+          <div className="aspect-[3/4] w-full overflow-hidden rounded-2xl border border-[#6FBF73]/20 bg-neutral-50 dark:bg-white/5">
+            <iframe
+              src={`${pdfUrl}#view=FitH`}
+              title={blog.title}
+              className="h-full w-full"
+            />
+          </div>
+        </div>
+      ) : null}
+
       <div className="prose prose-neutral max-w-none dark:prose-invert">
         {blog.content && blog.content.length > 0 ? (
           <PortableText value={blog.content} components={components} />
+        ) : pdfUrl ? (
+          <p className="text-base text-neutral-600 dark:text-neutral-300">
+            Lee el documento incrustado o descárgalo para revisarlo sin conexión.
+          </p>
         ) : (
           <p className="text-base text-neutral-600 dark:text-neutral-300">
-            Este artículo está disponible como documento descargable.
+            Este artículo estará disponible pronto.
           </p>
         )}
       </div>
 
-      {blog.documentFile?.url ? (
+      {pdfUrl ? (
         <div className="rounded-2xl border border-[#2E8B57]/20 bg-white p-6 shadow-sm dark:bg-[#04150c]">
           <h2 className="text-lg font-semibold text-[#0F2B1D] dark:text-[#f0efe9]">
             Descargar artículo
           </h2>
           <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-300">
-            Guarda la versión completa para leerla offline o compartirla con tu
-            comunidad.
+            Guarda la versión completa para leerla offline o compartirla con tu comunidad.
           </p>
           <a
-            href={blog.documentFile.url}
+            href={pdfUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="mt-4 inline-flex items-center rounded-full bg-[#2E8B57] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#256b45]"
           >
-            Descargar {blog.documentFile.originalFilename ?? "documento"}
+            Descargar {blog.documentFile?.originalFilename ?? "documento"}
           </a>
         </div>
       ) : null}
