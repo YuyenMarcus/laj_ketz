@@ -7,9 +7,9 @@ import { getBlogBySlug } from "../../../../lib/getBlogBySlug";
 export const dynamic = "force-dynamic";
 
 type BlogPageProps = {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 };
 
 export const revalidate = 3600;
@@ -91,7 +91,8 @@ const components: PortableTextComponents = {
 };
 
 export default async function BlogPostPage({ params }: BlogPageProps) {
-  const blog = await getBlogBySlug(params.slug);
+  const { slug } = await params;
+  const blog = await getBlogBySlug(slug);
 
   if (!blog) {
     notFound();

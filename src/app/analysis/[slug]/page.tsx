@@ -9,13 +9,14 @@ export const dynamic = "force-dynamic";
 export const revalidate = 3600;
 
 type AnalysisPageProps = {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 };
 
 export default async function AnalysisPage({ params }: AnalysisPageProps) {
-  const analysis = await getAnalysisBySlug(params.slug);
+  const { slug } = await params;
+  const analysis = await getAnalysisBySlug(slug);
 
   if (!analysis) {
     notFound();

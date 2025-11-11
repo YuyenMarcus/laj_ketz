@@ -38,6 +38,7 @@ export async function getBlogBySlug(
 
   try {
     const blog = await client.fetch<BlogDetailDocument | null>(query, { slug });
+    console.log("getBlogBySlug", slug, blog?.title ?? null);
     return blog ?? null;
   } catch (error) {
     console.error("Error fetching blog by slug:", error);
