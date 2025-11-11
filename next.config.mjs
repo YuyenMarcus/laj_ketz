@@ -23,6 +23,9 @@ const config = {
         hostname: "upload.wikimedia.org",
       },
     ],
+    dangerouslyAllowSVG: true,
+    contentSecurityPolicy:
+      "default-src 'self'; script-src 'none'; sandbox; connect-src *; img-src 'self' data: https:; style-src 'unsafe-inline';",
   },
 };
 
