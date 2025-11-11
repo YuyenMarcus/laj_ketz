@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import type { Variants } from "framer-motion";
 import {
   animate,
   motion,
@@ -30,9 +31,9 @@ const sectionVariants = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.6, ease: "easeOut" },
+    transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
   },
-};
+} satisfies Variants;
 
 const TIMELINE_VARIANTS: Record<
   NonNullable<TimelineHighlight["direction"]>,
