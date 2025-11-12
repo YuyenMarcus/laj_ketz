@@ -22,6 +22,10 @@ const config = {
         protocol: "https",
         hostname: "upload.wikimedia.org",
       },
+      {
+        protocol: "https",
+        hostname: "logo.clearbit.com",
+      },
     ],
     dangerouslyAllowSVG: true,
     contentSecurityPolicy:

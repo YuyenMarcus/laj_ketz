@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { ReactNode } from "react";
+import { Playfair_Display, Inter } from "next/font/google";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -26,10 +27,27 @@ export const metadata: Metadata = {
   },
 };
 
+const display = Playfair_Display({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-display",
+});
+
+const sans = Inter({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-sans",
+});
+
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className="bg-laj-light text-laj-ink">
-      <body className="min-h-screen bg-laj-light antialiased">{children}</body>
+    <html
+      lang="en"
+      className={`${display.variable} ${sans.variable} bg-laj-light text-laj-ink`}
+    >
+      <body className="min-h-screen bg-laj-light font-sans antialiased">
+        {children}
+      </body>
     </html>
   );
 }

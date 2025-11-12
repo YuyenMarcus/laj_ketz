@@ -14,7 +14,7 @@ export default function BlogPDF({ pdfUrl }: BlogPDFProps) {
   const defaultLayoutPluginInstance = defaultLayoutPlugin();
 
   return (
-    <div className="w-full overflow-hidden rounded-3xl border border-[#6FBF73]/30 bg-white shadow-lg dark:bg-[#04150c]">
+    <div className="w-full overflow-hidden rounded-3xl border border-[#1F5F3A]/30 bg-white shadow-lg dark:bg-[#04150c]">
       <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js">
         <Viewer fileUrl={pdfUrl} plugins={[defaultLayoutPluginInstance]} />
       </Worker>

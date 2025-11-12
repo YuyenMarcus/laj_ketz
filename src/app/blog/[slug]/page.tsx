@@ -82,7 +82,7 @@ const components: PortableTextComponents = {
           href={href}
           target={isExternal ? "_blank" : undefined}
           rel={isExternal ? "noopener noreferrer" : undefined}
-          className="font-semibold text-[#2E8B57] hover:text-[#256b45]"
+          className="font-semibold text-[#0A361E] hover:text-[#052812]"
         >
           {children}
         </Link>
@@ -93,12 +93,9 @@ const components: PortableTextComponents = {
 
 export default async function BlogPostPage({ params }: BlogPageProps) {
   const { slug } = await params;
-  console.log("🔍 Fetching blog by slug:", slug);
   const blog = await getBlogBySlug(slug);
-  console.log("🧠 Blog data returned:", blog);
 
   if (!blog || !blog.title) {
-    console.error("❌ Blog missing, triggering notFound");
     notFound();
   }
 
@@ -113,30 +110,32 @@ export default async function BlogPostPage({ params }: BlogPageProps) {
   const pdfUrl = blog.documentFile?.url;
 
   return (
-    <article className="mx-auto max-w-3xl space-y-6 px-6 py-12">
-      <div className="space-y-3">
-        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+    <article className="mx-auto max-w-4xl space-y-10 px-6 pb-20 pt-16 lg:px-10">
+      <div className="space-y-6">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <Link
             href="/"
-            className="text-sm font-semibold text-[#2E8B57] transition hover:text-[#256b45]"
+            className="text-xs font-semibold uppercase tracking-[0.35em] text-[#0A361E] transition hover:text-[#052812]"
           >
             ← Volver a la portada
           </Link>
           <Link
             href="/blog"
-            className="text-sm font-semibold text-[#2E8B57] transition hover:text-[#256b45]"
+            className="text-xs font-semibold uppercase tracking-[0.35em] text-[#0A361E] transition hover:text-[#052812]"
           >
             Archivo de historias
           </Link>
         </div>
-        <h1 className="text-4xl font-bold text-[#0F2B1D] dark:text-[#f0efe9]">
+        <h1 className="font-display text-4xl font-semibold leading-[1.05] text-[#0F2B1D] sm:text-5xl dark:text-[#f0efe9]">
           {blog.title}
         </h1>
         {publishedDate ? (
-          <p className="text-sm text-neutral-500">{publishedDate}</p>
+          <p className="text-sm uppercase tracking-[0.35em] text-[#1F5F3A]">
+            {publishedDate}
+          </p>
         ) : null}
         {blog.author ? (
-          <p className="text-sm font-medium text-neutral-600 dark:text-neutral-300">
+          <p className="text-sm text-neutral-600 dark:text-neutral-300">
             Por {blog.author}
           </p>
         ) : null}
@@ -145,7 +144,7 @@ export default async function BlogPostPage({ params }: BlogPageProps) {
             {blog.tags.map((tag) => (
               <span
                 key={tag}
-                className="rounded-full bg-[#2E8B57]/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-[#2E8B57]"
+                className="rounded-full bg-[#0A361E]/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.35em] text-[#0A361E]"
               >
                 {tag}
               </span>
@@ -155,7 +154,7 @@ export default async function BlogPostPage({ params }: BlogPageProps) {
       </div>
 
       {blog.thumbnailUrl ? (
-        <div className="overflow-hidden rounded-3xl border border-[#6FBF73]/30 shadow-lg">
+        <div className="overflow-hidden rounded-3xl border border-[#1F5F3A]/30 shadow-lg">
           <Image
             src={blog.thumbnailUrl}
             alt={blog.title}
@@ -168,21 +167,21 @@ export default async function BlogPostPage({ params }: BlogPageProps) {
       ) : null}
 
       {blog.summary ? (
-        <p className="rounded-2xl bg-[#2E8B57]/10 p-6 text-base text-[#0F2B1D] dark:text-neutral-100">
+        <p className="rounded-[32px] bg-[#F3F0E0] p-7 text-sm leading-relaxed text-[#0F2B1D] shadow-inner shadow-[#0A361E]/10 dark:text-neutral-100">
           {blog.summary}
         </p>
       ) : null}
 
       {pdfUrl ? (
-        <div className="space-y-4 rounded-3xl border border-[#6FBF73]/30 bg-white p-6 shadow-lg dark:bg-[#04150c]">
-          <h2 className="text-lg font-semibold text-[#0F2B1D] dark:text-[#f0efe9]">
+        <div className="space-y-4 rounded-[36px] border border-[#1F5F3A]/15 bg-white/90 p-6 shadow-lg shadow-[#0A361E]/10 dark:bg-[#04150c]">
+          <h2 className="font-display text-2xl font-semibold text-[#0F2B1D] dark:text-[#f0efe9]">
             Vista previa del documento
           </h2>
           <BlogPDF pdfUrl={pdfUrl} />
         </div>
       ) : null}
 
-      <div className="prose prose-neutral max-w-none dark:prose-invert">
+      <div className="prose prose-neutral max-w-none prose-headings:font-display prose-headings:text-[#0F2B1D] prose-p:text-neutral-600 prose-strong:text-[#0F2B1D] prose-a:text-[#0A361E] dark:prose-invert">
         {blog.content && blog.content.length > 0 ? (
           <PortableText value={blog.content} components={components} />
         ) : pdfUrl ? (
@@ -197,8 +196,8 @@ export default async function BlogPostPage({ params }: BlogPageProps) {
       </div>
 
       {pdfUrl ? (
-        <div className="rounded-2xl border border-[#2E8B57]/20 bg-white p-6 shadow-sm dark:bg-[#04150c]">
-          <h2 className="text-lg font-semibold text-[#0F2B1D] dark:text-[#f0efe9]">
+        <div className="rounded-[32px] border border-[#1F5F3A]/15 bg-white/90 p-6 shadow-lg shadow-[#0A361E]/10 dark:bg-[#04150c]">
+          <h2 className="font-display text-xl font-semibold text-[#0F2B1D] dark:text-[#f0efe9]">
             Descargar artículo
           </h2>
           <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-300">
@@ -208,7 +207,7 @@ export default async function BlogPostPage({ params }: BlogPageProps) {
             href={pdfUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-4 inline-flex items-center rounded-full bg-[#2E8B57] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#256b45]"
+            className="mt-4 inline-flex items-center gap-2 rounded-full bg-[#0A361E] px-6 py-3 text-xs font-semibold uppercase tracking-[0.35em] text-white transition hover:bg-[#052812]"
           >
             Descargar {blog.documentFile?.originalFilename ?? "documento"}
           </a>

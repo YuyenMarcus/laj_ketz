@@ -32,11 +32,11 @@ export default async function BlogIndexPage() {
         <div className="flex flex-col items-center justify-between gap-3 sm:flex-row">
           <Link
             href="/"
-            className="text-sm font-semibold text-[#2E8B57] transition hover:text-[#256b45]"
+            className="text-sm font-semibold text-[#0A361E] transition hover:text-[#052812]"
           >
             ← Volver a la portada
           </Link>
-          <span className="inline-flex items-center gap-2 rounded-full bg-[#2E8B57]/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-[#2E8B57]">
+          <span className="inline-flex items-center gap-2 rounded-full bg-[#0A361E]/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-[#0A361E]">
             Archivo de historias
           </span>
           <div className="w-[180px]" />
@@ -63,7 +63,7 @@ export default async function BlogIndexPage() {
             return (
               <article
                 key={blog._id}
-                className="group flex h-full flex-col overflow-hidden rounded-3xl border border-[#6FBF73]/20 bg-white shadow-lg shadow-[#2E8B57]/10 transition hover:border-[#2E8B57]/60 hover:shadow-xl dark:border-[#6FBF73]/25 dark:bg-[#04150c]"
+                className="group flex h-full flex-col overflow-hidden rounded-3xl border border-[#1F5F3A]/20 bg-white shadow-lg shadow-[#0A361E]/10 transition hover:border-[#0A361E]/60 hover:shadow-xl dark:border-[#1F5F3A]/25 dark:bg-[#04150c]"
               >
                 <div className="relative h-64 w-full overflow-hidden">
                   <Image
@@ -76,11 +76,11 @@ export default async function BlogIndexPage() {
                   />
                 </div>
                 <div className="flex flex-1 flex-col gap-4 px-8 py-6">
-                  <div className="flex items-center justify-between text-xs uppercase tracking-[0.2em] text-[#2E8B57]">
+                  <div className="flex items-center justify-between text-xs uppercase tracking-[0.2em] text-[#0A361E]">
                     <span>{tagLine}</span>
                     {publishedDate ? <span>{publishedDate}</span> : null}
                   </div>
-                  <h2 className="text-2xl font-semibold leading-snug text-[#0F2B1D] transition group-hover:text-[#2E8B57] dark:text-[#f0efe9]">
+                  <h2 className="text-2xl font-semibold leading-snug text-[#0F2B1D] transition group-hover:text-[#0A361E] dark:text-[#f0efe9]">
                     {blog.title}
                   </h2>
                   {blog.summary ? (
@@ -88,7 +88,7 @@ export default async function BlogIndexPage() {
                       {blog.summary}
                     </p>
                   ) : null}
-                  <div className="mt-auto flex items-center justify-between text-sm font-semibold text-[#2E8B57]">
+                  <div className="mt-auto flex items-center justify-between text-sm font-semibold text-[#0A361E]">
                     <Link href={href} className="inline-flex items-center gap-2">
                       Leer artículo completo →
                     </Link>
@@ -108,7 +108,7 @@ export default async function BlogIndexPage() {
             );
           })
         ) : (
-          <div className="col-span-full rounded-3xl border border-dashed border-[#6FBF73]/30 bg-white/80 p-10 text-center text-sm text-neutral-500 dark:border-[#6FBF73]/30 dark:bg-white/5">
+          <div className="col-span-full rounded-3xl border border-dashed border-[#1F5F3A]/30 bg-white/80 p-10 text-center text-sm text-neutral-500 dark:border-[#1F5F3A]/30 dark:bg-white/5">
             Aún no hay historias publicadas. Publica un blog en Sanity Studio y vuelve a
             cargar esta página.
           </div>

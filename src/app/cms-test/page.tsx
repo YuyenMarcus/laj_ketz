@@ -54,7 +54,7 @@ export default async function CmsTestPage() {
                   <p className="mt-2 text-sm text-neutral-700">{blog.summary}</p>
                 ) : null}
                 {blog.tags && blog.tags.length > 0 ? (
-                  <p className="mt-2 text-xs uppercase tracking-wide text-[#2E8B57]">
+                  <p className="mt-2 text-xs uppercase tracking-wide text-[#0A361E]">
                     {blog.tags.join(", ")}
                   </p>
                 ) : null}
@@ -84,7 +84,7 @@ export default async function CmsTestPage() {
                     href={vlog.videoUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="mt-2 inline-flex text-sm font-semibold text-[#2E8B57] hover:text-[#256b45]"
+                    className="mt-2 inline-flex text-sm font-semibold text-[#0A361E] hover:text-[#052812]"
                   >
                     Ver video →
                   </a>

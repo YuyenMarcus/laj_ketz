@@ -10,19 +10,19 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        "laj-forest": "#2E8B57",
-        "laj-lime": "#6FBF73",
-        "laj-light": "#F7F1E6",
+        "laj-forest": "#0A361E",
+        "laj-lime": "#1F5F3A",
+        "laj-light": "#E3E0C9",
         "laj-ink": "#0F2B1D",
-        beige: "#F7F1E6",
+        beige: "#E3E0C9",
         darkText: "#0F2B1D",
       },
       fontFamily: {
-        display: ["Inter", "system-ui", "sans-serif"],
-        body: ["Inter", "system-ui", "sans-serif"],
+        sans: ["var(--font-sans)", "system-ui", "sans-serif"],
+        display: ["var(--font-display)", "serif"],
       },
       boxShadow: {
-        glow: "0 20px 45px -15px rgba(46, 139, 87, 0.35)",
+        glow: "0 24px 60px -20px rgba(10, 54, 30, 0.35)",
       },
     },
   },

@@ -88,7 +88,7 @@ export type HomePageProps = {
 
 const trendColors: Record<NonNullable<SnapshotStat["trendDirection"]>, string> =
   {
-    up: "text-[#6FBF73]",
+    up: "text-[#1F5F3A]",
     down: "text-red-500",
     neutral: "text-[#0F2B1D]",
   };
@@ -104,10 +104,10 @@ const Header: React.FC<{ logoText: string; navLinks: NavLink[] }> = ({
   logoText,
   navLinks,
 }) => (
-  <header className="sticky top-0 z-20 bg-[#F7F1E6]/95 backdrop-blur-md border-b border-[#6FBF73]/20">
+  <header className="sticky top-0 z-20 bg-[#E3E0C9]/95 backdrop-blur-md border-b border-[#1F5F3A]/20">
     <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
       <div className="flex items-center gap-3">
-        <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#2E8B57] text-white font-bold">
+        <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#0A361E] text-white font-bold">
           LK
         </span>
         <span className="text-lg font-semibold text-[#0F2B1D]">
@@ -119,7 +119,7 @@ const Header: React.FC<{ logoText: string; navLinks: NavLink[] }> = ({
           <a
             key={link.href}
             href={link.href}
-            className="text-sm font-medium text-[#0F2B1D] hover:text-[#2E8B57] transition-colors"
+            className="text-sm font-medium text-[#0F2B1D] hover:text-[#0A361E] transition-colors"
           >
             {link.label}
           </a>
@@ -128,13 +128,13 @@ const Header: React.FC<{ logoText: string; navLinks: NavLink[] }> = ({
       <div className="flex items-center gap-3">
         <button
           type="button"
-          className="hidden rounded-full border border-[#2E8B57] px-4 py-2 text-sm font-semibold text-[#2E8B57] transition hover:bg-[#2E8B57] hover:text-white md:block"
+          className="hidden rounded-full border border-[#0A361E] px-4 py-2 text-sm font-semibold text-[#0A361E] transition hover:bg-[#0A361E] hover:text-white md:block"
         >
           Subscribe
         </button>
         <button
           type="button"
-          className="flex h-10 w-10 items-center justify-center rounded-full border border-[#6FBF73]/40 text-[#0F2B1D] transition hover:border-[#2E8B57] hover:text-[#2E8B57]"
+          className="flex h-10 w-10 items-center justify-center rounded-full border border-[#1F5F3A]/40 text-[#0F2B1D] transition hover:border-[#0A361E] hover:text-[#0A361E]"
           aria-label="Search"
         >
           🔍
@@ -145,11 +145,11 @@ const Header: React.FC<{ logoText: string; navLinks: NavLink[] }> = ({
 );
 
 const Hero: React.FC<{ content: HeroContent }> = ({ content }) => (
-  <section className="bg-[#F7F1E6]">
+  <section className="bg-[#E3E0C9]">
     <div className="mx-auto flex max-w-6xl flex-col gap-8 px-6 py-16 md:flex-row md:items-center">
       <div className="flex-1">
         {content.highlight ? (
-          <p className="inline-flex items-center rounded-full bg-[#6FBF73]/15 px-4 py-1 text-xs font-semibold uppercase tracking-wider text-[#2E8B57]">
+          <p className="inline-flex items-center rounded-full bg-[#1F5F3A]/15 px-4 py-1 text-xs font-semibold uppercase tracking-wider text-[#0A361E]">
             {content.highlight}
           </p>
         ) : null}
@@ -162,14 +162,14 @@ const Hero: React.FC<{ content: HeroContent }> = ({ content }) => (
         <div className="mt-8 flex flex-wrap gap-4">
           <a
             href={content.primaryCta.href}
-            className="rounded-full bg-[#2E8B57] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#256b45]"
+            className="rounded-full bg-[#0A361E] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#052812]"
           >
             {content.primaryCta.label}
           </a>
           {content.secondaryCta ? (
             <a
               href={content.secondaryCta.href}
-              className="rounded-full border border-[#2E8B57] px-6 py-3 text-sm font-semibold text-[#2E8B57] transition hover:bg-[#2E8B57] hover:text-white"
+              className="rounded-full border border-[#0A361E] px-6 py-3 text-sm font-semibold text-[#0A361E] transition hover:bg-[#0A361E] hover:text-white"
             >
               {content.secondaryCta.label}
             </a>
@@ -177,9 +177,9 @@ const Hero: React.FC<{ content: HeroContent }> = ({ content }) => (
         </div>
       </div>
       <div className="flex flex-1 items-center justify-center">
-        <div className="relative w-full max-w-md overflow-hidden rounded-3xl bg-[#2E8B57] p-1 shadow-xl">
+        <div className="relative w-full max-w-md overflow-hidden rounded-3xl bg-[#0A361E] p-1 shadow-xl">
           <div className="rounded-[26px] bg-white/95 p-6">
-            <p className="text-sm font-semibold uppercase tracking-wider text-[#2E8B57]">
+            <p className="text-sm font-semibold uppercase tracking-wider text-[#0A361E]">
               Weekly Pulse
             </p>
             <h2 className="mt-3 text-2xl font-bold text-[#0F2B1D]">
@@ -201,7 +201,7 @@ const Hero: React.FC<{ content: HeroContent }> = ({ content }) => (
             </ul>
             <a
               href={content.primaryCta.href}
-              className="mt-6 inline-flex items-center text-sm font-semibold text-[#2E8B57] hover:text-[#256b45]"
+              className="mt-6 inline-flex items-center text-sm font-semibold text-[#0A361E] hover:text-[#052812]"
             >
               Read full briefing →
             </a>
@@ -219,7 +219,7 @@ const TopStories: React.FC<{ stories: Story[] }> = ({ stories }) => (
         <h2 className="text-2xl font-bold text-[#0F2B1D]">Top stories</h2>
         <a
           href="/analysis"
-          className="text-sm font-semibold text-[#2E8B57] hover:text-[#256b45]"
+          className="text-sm font-semibold text-[#0A361E] hover:text-[#052812]"
         >
           See all analysis →
         </a>
@@ -228,28 +228,28 @@ const TopStories: React.FC<{ stories: Story[] }> = ({ stories }) => (
         {stories.map((story) => (
           <article
             key={story.id}
-            className="group flex flex-col overflow-hidden rounded-2xl border border-[#6FBF73]/20 bg-[#F7F1E6]/50 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
+            className="group flex flex-col overflow-hidden rounded-2xl border border-[#1F5F3A]/20 bg-[#E3E0C9]/50 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
           >
-            <div className="relative h-48 w-full overflow-hidden bg-[#2E8B57]/20">
+            <div className="relative h-48 w-full overflow-hidden bg-[#0A361E]/20">
               <img
                 src={story.imageUrl}
                 alt={story.title}
                 className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
               />
               {story.tag ? (
-                <span className="absolute left-4 top-4 rounded-full bg-[#2E8B57] px-3 py-1 text-xs font-semibold uppercase tracking-wider text-white">
+                <span className="absolute left-4 top-4 rounded-full bg-[#0A361E] px-3 py-1 text-xs font-semibold uppercase tracking-wider text-white">
                   {story.tag}
                 </span>
               ) : null}
             </div>
             <div className="flex flex-1 flex-col gap-3 p-6">
-              <h3 className="text-lg font-semibold text-[#0F2B1D] group-hover:text-[#2E8B57]">
+              <h3 className="text-lg font-semibold text-[#0F2B1D] group-hover:text-[#0A361E]">
                 {story.title}
               </h3>
               <p className="text-sm text-[#0F2B1D]/70">{story.summary}</p>
               <a
                 href={story.href}
-                className="mt-auto text-sm font-semibold text-[#2E8B57] group-hover:text-[#256b45]"
+                className="mt-auto text-sm font-semibold text-[#0A361E] group-hover:text-[#052812]"
               >
                 Read story →
               </a>
@@ -262,7 +262,7 @@ const TopStories: React.FC<{ stories: Story[] }> = ({ stories }) => (
 );
 
 const WeeklySnapshot: React.FC<{ stats: SnapshotStat[] }> = ({ stats }) => (
-  <section className="bg-[#F7F1E6] py-16">
+  <section className="bg-[#E3E0C9] py-16">
     <div className="mx-auto max-w-6xl px-6">
       <div className="flex items-baseline justify-between">
         <h2 className="text-2xl font-bold text-[#0F2B1D]">Weekly snapshot</h2>
@@ -274,9 +274,9 @@ const WeeklySnapshot: React.FC<{ stats: SnapshotStat[] }> = ({ stats }) => (
         {stats.map((stat) => (
           <div
             key={stat.label}
-            className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-[#6FBF73]/10"
+            className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-[#1F5F3A]/10"
           >
-            <dt className="text-sm font-semibold uppercase tracking-wider text-[#2E8B57]">
+            <dt className="text-sm font-semibold uppercase tracking-wider text-[#0A361E]">
               {stat.label}
             </dt>
             <dd className="mt-3 text-3xl font-black text-[#0F2B1D]">
@@ -304,7 +304,7 @@ const LatestPosts: React.FC<{ posts: BlogPost[] }> = ({ posts }) => (
         <h2 className="text-2xl font-bold text-[#0F2B1D]">Latest guides & blogs</h2>
         <a
           href="/blog"
-          className="text-sm font-semibold text-[#2E8B57] hover:text-[#256b45]"
+          className="text-sm font-semibold text-[#0A361E] hover:text-[#052812]"
         >
           Explore all →
         </a>
@@ -313,7 +313,7 @@ const LatestPosts: React.FC<{ posts: BlogPost[] }> = ({ posts }) => (
         {posts.map((post) => (
           <article
             key={post.id}
-            className="flex flex-col overflow-hidden rounded-2xl border border-[#6FBF73]/20 bg-[#F7F1E6]/40 transition hover:-translate-y-1 hover:shadow-md"
+            className="flex flex-col overflow-hidden rounded-2xl border border-[#1F5F3A]/20 bg-[#E3E0C9]/40 transition hover:-translate-y-1 hover:shadow-md"
           >
             {post.imageUrl ? (
               <div className="relative h-40 w-full overflow-hidden">
@@ -325,13 +325,13 @@ const LatestPosts: React.FC<{ posts: BlogPost[] }> = ({ posts }) => (
               </div>
             ) : null}
             <div className="flex flex-1 flex-col gap-3 p-6">
-              <div className="flex items-center gap-3 text-xs uppercase tracking-wider text-[#2E8B57]">
+              <div className="flex items-center gap-3 text-xs uppercase tracking-wider text-[#0A361E]">
                 {post.category ? <span>{post.category}</span> : null}
                 {post.readTime ? (
                   <span className="text-[#0F2B1D]/60">{post.readTime}</span>
                 ) : null}
               </div>
-              <h3 className="text-lg font-semibold text-[#0F2B1D] hover:text-[#2E8B57]">
+              <h3 className="text-lg font-semibold text-[#0F2B1D] hover:text-[#0A361E]">
                 {post.title}
               </h3>
               <p className="text-sm text-[#0F2B1D]/70 line-clamp-3">
@@ -339,7 +339,7 @@ const LatestPosts: React.FC<{ posts: BlogPost[] }> = ({ posts }) => (
               </p>
               <a
                 href={post.href}
-                className="mt-auto text-sm font-semibold text-[#2E8B57] hover:text-[#256b45]"
+                className="mt-auto text-sm font-semibold text-[#0A361E] hover:text-[#052812]"
               >
                 Read article →
               </a>
@@ -352,10 +352,10 @@ const LatestPosts: React.FC<{ posts: BlogPost[] }> = ({ posts }) => (
 );
 
 const FeaturedVlog: React.FC<{ vlog: Vlog }> = ({ vlog }) => (
-  <section className="bg-[#F7F1E6] py-16">
+  <section className="bg-[#E3E0C9] py-16">
     <div className="mx-auto grid max-w-6xl gap-10 px-6 md:grid-cols-[1.2fr_0.8fr] md:items-center">
       <div>
-        <div className="aspect-video overflow-hidden rounded-3xl border border-[#6FBF73]/30 bg-black shadow-lg">
+        <div className="aspect-video overflow-hidden rounded-3xl border border-[#1F5F3A]/30 bg-black shadow-lg">
           <iframe
             title={vlog.title}
             src={vlog.videoUrl}
@@ -366,7 +366,7 @@ const FeaturedVlog: React.FC<{ vlog: Vlog }> = ({ vlog }) => (
         </div>
       </div>
       <div>
-        <p className="text-sm font-semibold uppercase tracking-wider text-[#2E8B57]">
+        <p className="text-sm font-semibold uppercase tracking-wider text-[#0A361E]">
           Featured vlog
         </p>
         <h2 className="mt-3 text-2xl font-bold text-[#0F2B1D]">{vlog.title}</h2>
@@ -379,13 +379,13 @@ const FeaturedVlog: React.FC<{ vlog: Vlog }> = ({ vlog }) => (
         <div className="mt-6 flex flex-wrap gap-4">
           <a
             href={vlog.videoUrl}
-            className="rounded-full bg-[#2E8B57] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#256b45]"
+            className="rounded-full bg-[#0A361E] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#052812]"
           >
             Watch on YouTube
           </a>
           <a
             href={vlog.transcriptUrl}
-            className="rounded-full border border-[#2E8B57] px-5 py-3 text-sm font-semibold text-[#2E8B57] transition hover:bg-[#2E8B57] hover:text-white"
+            className="rounded-full border border-[#0A361E] px-5 py-3 text-sm font-semibold text-[#0A361E] transition hover:bg-[#0A361E] hover:text-white"
           >
             Read transcript
           </a>
@@ -398,13 +398,13 @@ const FeaturedVlog: React.FC<{ vlog: Vlog }> = ({ vlog }) => (
 const HowToHelp: React.FC<{ actions: ActionLink[] }> = ({ actions }) => (
   <section className="bg-white py-16">
     <div className="mx-auto max-w-6xl px-6">
-      <div className="rounded-3xl bg-gradient-to-br from-[#2E8B57] to-[#256b45] p-10 text-white shadow-xl">
+      <div className="rounded-3xl bg-gradient-to-br from-[#0A361E] to-[#052812] p-10 text-white shadow-xl">
         <div className="max-w-2xl">
-          <p className="text-sm font-semibold uppercase tracking-widest text-[#F7F1E6]/80">
+          <p className="text-sm font-semibold uppercase tracking-widest text-[#E3E0C9]/80">
             Take action
           </p>
           <h2 className="mt-4 text-3xl font-bold">How to help this week</h2>
-          <p className="mt-3 text-sm text-[#F7F1E6]/90">
+          <p className="mt-3 text-sm text-[#E3E0C9]/90">
             Pick one micro-action, share the impact, and tag{" "}
             <span className="font-semibold">#WakeUpSelva</span>.
           </p>
@@ -419,7 +419,7 @@ const HowToHelp: React.FC<{ actions: ActionLink[] }> = ({ actions }) => (
               <span className="text-lg font-semibold text-white">
                 {action.label}
               </span>
-              <span className="text-sm text-[#F7F1E6]/90">
+              <span className="text-sm text-[#E3E0C9]/90">
                 {action.description}
               </span>
             </a>
@@ -433,9 +433,9 @@ const HowToHelp: React.FC<{ actions: ActionLink[] }> = ({ actions }) => (
 const Newsletter: React.FC<{ action: HomePageProps["newsletterAction"] }> = ({
   action,
 }) => (
-  <section className="bg-[#F7F1E6] py-16">
-    <div className="mx-auto max-w-3xl rounded-3xl border border-[#6FBF73]/30 bg-white/80 p-10 shadow-sm backdrop-blur">
-      <p className="text-sm font-semibold uppercase tracking-wider text-[#2E8B57]">
+  <section className="bg-[#E3E0C9] py-16">
+    <div className="mx-auto max-w-3xl rounded-3xl border border-[#1F5F3A]/30 bg-white/80 p-10 shadow-sm backdrop-blur">
+      <p className="text-sm font-semibold uppercase tracking-wider text-[#0A361E]">
         Stay in the loop
       </p>
       <h2 className="mt-4 text-3xl font-bold text-[#0F2B1D]">
@@ -456,11 +456,11 @@ const Newsletter: React.FC<{ action: HomePageProps["newsletterAction"] }> = ({
           type="email"
           required
           placeholder="you@example.com"
-          className="flex-1 rounded-full border border-[#6FBF73]/40 bg-white px-5 py-3 text-sm text-[#0F2B1D] shadow-sm focus:border-[#2E8B57] focus:outline-none focus:ring-2 focus:ring-[#6FBF73]/60"
+          className="flex-1 rounded-full border border-[#1F5F3A]/40 bg-white px-5 py-3 text-sm text-[#0F2B1D] shadow-sm focus:border-[#0A361E] focus:outline-none focus:ring-2 focus:ring-[#1F5F3A]/60"
         />
         <button
           type="submit"
-          className="rounded-full bg-[#2E8B57] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#256b45]"
+          className="rounded-full bg-[#0A361E] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#052812]"
         >
           {action.buttonLabel}
         </button>
@@ -470,22 +470,22 @@ const Newsletter: React.FC<{ action: HomePageProps["newsletterAction"] }> = ({
 );
 
 const Footer: React.FC<{ footer: HomePageProps["footer"] }> = ({ footer }) => (
-  <footer className="bg-[#0F2B1D] py-16 text-[#F7F1E6]">
+  <footer className="bg-[#0F2B1D] py-16 text-[#E3E0C9]">
     <div className="mx-auto max-w-6xl px-6">
       <div className="grid gap-10 md:grid-cols-[1.2fr_1fr]">
         <div>
           <h3 className="text-2xl font-bold">Laj Ketz</h3>
-          <p className="mt-4 max-w-md text-sm text-[#F7F1E6]/80">
+          <p className="mt-4 max-w-md text-sm text-[#E3E0C9]/80">
             {footer.description}
           </p>
         </div>
         <div className="grid gap-8 sm:grid-cols-2">
           {footer.linkGroups.map((group) => (
             <div key={group.title}>
-              <p className="text-sm font-semibold uppercase tracking-wider text-[#6FBF73]">
+              <p className="text-sm font-semibold uppercase tracking-wider text-[#1F5F3A]">
                 {group.title}
               </p>
-              <ul className="mt-3 space-y-2 text-sm text-[#F7F1E6]/80">
+              <ul className="mt-3 space-y-2 text-sm text-[#E3E0C9]/80">
                 {group.links.map((link) => (
                   <li key={link.href}>
                     <a
@@ -501,13 +501,13 @@ const Footer: React.FC<{ footer: HomePageProps["footer"] }> = ({ footer }) => (
           ))}
         </div>
       </div>
-      <div className="mt-10 flex flex-col justify-between gap-6 border-t border-white/10 pt-6 text-sm text-[#F7F1E6]/60 md:flex-row md:items-center">
+      <div className="mt-10 flex flex-col justify-between gap-6 border-t border-white/10 pt-6 text-sm text-[#E3E0C9]/60 md:flex-row md:items-center">
         <div className="flex items-center gap-4">
           {footer.socialLinks.map((link) => (
             <a
               key={link.href}
               href={link.href}
-              className="rounded-full border border-[#6FBF73]/40 px-4 py-2 font-semibold text-[#F7F1E6]/80 transition hover:border-[#6FBF73] hover:text-white"
+              className="rounded-full border border-[#1F5F3A]/40 px-4 py-2 font-semibold text-[#E3E0C9]/80 transition hover:border-[#1F5F3A] hover:text-white"
             >
               {link.label}
             </a>
@@ -531,7 +531,7 @@ export const HomePage: React.FC<HomePageProps> = ({
   newsletterAction,
   footer,
 }) => (
-  <div className="min-h-screen bg-[#F7F1E6]">
+  <div className="min-h-screen bg-[#E3E0C9]">
     <Header logoText={logoText} navLinks={navLinks} />
     <main>
       <Hero content={hero} />

@@ -16,9 +16,9 @@ import {
 import { Sun, Moon, Camera, Leaf } from "lucide-react";
 
 const COLORS = {
-  primary: "#2E8B57",
-  accent: "#6FBF73",
-  beige: "#F7F1E6",
+  primary: "#0A361E",
+  accent: "#1F5F3A",
+  beige: "#E3E0C9",
   darkText: "#0F2B1D",
 };
 
@@ -40,18 +40,18 @@ const TIMELINE_VARIANTS: Record<
   NonNullable<TimelineHighlight["direction"]>,
   { text: string; icon: string }
 > = {
-  up: { text: "text-[#6FBF73]", icon: "▲" },
-  down: { text: "text-rose-300", icon: "▼" },
-  flat: { text: "text-[#F7F1E6]", icon: "↔" },
+  up: { text: "text-[#0A361E]", icon: "▲" },
+  down: { text: "text-[#C2574A]", icon: "▼" },
+  flat: { text: "text-[#1F5F3A]", icon: "↔" },
 };
 
 const SNAPSHOT_VARIANTS: Record<
   NonNullable<SnapshotMetric["direction"]>,
   { text: string; icon: string }
 > = {
-  up: { text: "text-[#2E8B57]", icon: "▲" },
-  down: { text: "text-rose-500", icon: "▼" },
-  flat: { text: "text-[#0F2B1D]", icon: "↔" },
+  up: { text: "text-[#0A361E]", icon: "▲" },
+  down: { text: "text-[#C2574A]", icon: "▼" },
+  flat: { text: "text-[#1F5F3A]", icon: "↔" },
 };
 
 const directionLabelEs = (direction: "up" | "down" | "flat") => {
@@ -575,8 +575,10 @@ export default function LajKetzHome(props: LajKetzHomeProps = {}) {
     : Array.isArray(_timeline)
     ? _timeline
     : [];
+  const featuredPosts = posts.slice(0, 4);
 
   const [isDark, setIsDark] = useDarkMode();
+  const [navSolid, setNavSolid] = useState(false);
   const heroSectionRef = useRef<HTMLDivElement | null>(null);
   const { scrollYProgress } = useScroll({
     target: heroSectionRef,
@@ -585,6 +587,20 @@ export default function LajKetzHome(props: LajKetzHomeProps = {}) {
   const parallaxY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
   const fogY = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
   const fogOpacity = useTransform(scrollYProgress, [0, 1], [0.65, 0.25]);
+  const heroZoom = useTransform(scrollYProgress, [0, 1], [1, 1.12]);
+  const heroClipPath = useTransform(scrollYProgress, [0, 1], [
+    "ellipse(140% 120% at 50% 10%)",
+    "ellipse(85% 70% at 78% 10%)",
+  ]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setNavSolid(window.scrollY > 32);
+    };
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const scrollToSection = useCallback((id: string) => {
     if (typeof window === "undefined") return;
@@ -648,6 +664,7 @@ export default function LajKetzHome(props: LajKetzHomeProps = {}) {
     { href: "#weekly-snapshot", label: strings.weeklySnapshot.title },
     { href: "#stories", label: strings.postsSection.title },
     { href: "#weekly-analysis", label: strings.analysisSection.title },
+    { href: "#purpose", label: language === "es" ? "Propósito" : "Purpose" },
     { href: "#partners", label: strings.partnersSection.title },
   ];
 
@@ -674,32 +691,46 @@ export default function LajKetzHome(props: LajKetzHomeProps = {}) {
 
   return (
     <div className="min-h-screen bg-beige text-darkText transition-colors dark:bg-[#0b1a12] dark:text-[#f0efe9]">
-      <header className="sticky top-0 z-30 border-b border-[#6FBF73]/20 bg-beige/90 backdrop-blur">
-        <div className={`${CONTAINER_CLASSES} flex items-center justify-between py-4`}>
+      <header
+        className={`sticky top-0 z-40 transition-all duration-500 ${
+          navSolid
+            ? "bg-[#E3E0C9]/95 shadow-sm backdrop-blur"
+            : "bg-transparent backdrop-blur-none"
+        }`}
+      >
+        <div className={`${CONTAINER_CLASSES} flex items-center justify-between py-5`}>
           <div className="flex items-center gap-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/60 shadow-sm dark:bg-white/5">
-              <Leaf className="text-[#2E8B57] dark:text-[#6FBF73]" />
+            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/70 shadow-sm shadow-[#0A361E]/10 dark:bg-white/5">
+              <Leaf className="text-[#0A361E] dark:text-[#1F5F3A]" />
             </div>
-            <Link href="/" className="text-lg font-semibold tracking-wide">
-              Laj Ketz
-            </Link>
+            <div className="flex flex-col">
+              <Link
+                href="/"
+                className="font-display text-lg font-semibold uppercase tracking-[0.3em]"
+              >
+                LAJ KETZ
+              </Link>
+              <span className="text-xs uppercase tracking-[0.4em] text-[#1F5F3A]">
+                {strings.heroPulseLabel}
+              </span>
+            </div>
           </div>
 
-          <div className="flex items-center gap-3">
-            <div className="hidden items-center gap-4 lg:flex">
+          <div className="flex items-center gap-4">
+            <nav className="hidden items-center gap-6 text-xs font-semibold uppercase tracking-[0.35em] text-[#0F2B1D] lg:flex">
               {navItems.map((item) => (
                 <a
                   key={item.href}
                   href={item.href}
-                  className="text-sm font-medium text-[#0F2B1D] transition hover:text-[#2E8B57] dark:text-[#f0efe9]"
+                  className="transition hover:text-[#0A361E]"
                 >
                   {item.label}
                 </a>
               ))}
-            </div>
+            </nav>
 
-            <div className="flex items-center gap-2">
-              <div className="inline-flex h-9 items-center overflow-hidden rounded-full border border-[#2E8B57]/40 bg-white/70 text-xs font-semibold text-[#0F2B1D] shadow-sm backdrop-blur dark:border-white/10 dark:bg-white/10 dark:text-[#f0efe9]">
+            <div className="flex items-center gap-3">
+              <div className="inline-flex h-9 items-center overflow-hidden rounded-full border border-[#0A361E]/30 bg-white/70 text-[0.7rem] font-semibold text-[#0F2B1D] shadow-sm backdrop-blur dark:border-white/10 dark:bg-white/10 dark:text-[#f0efe9]">
                 {(["es", "en"] as LanguageKey[]).map((code) => {
                   const isActive = language === code;
                   return (
@@ -707,10 +738,10 @@ export default function LajKetzHome(props: LajKetzHomeProps = {}) {
                       key={code}
                       type="button"
                       onClick={() => setLanguage(code)}
-                      className={`relative px-3 py-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2E8B57] ${
+                      className={`relative px-3 py-1 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0A361E] ${
                         isActive
                           ? "text-white"
-                          : "text-[#0F2B1D] dark:text-[#f0efe9] hover:text-[#2E8B57]"
+                          : "text-[#0F2B1D] dark:text-[#f0efe9] hover:text-[#0A361E]"
                       }`}
                       aria-pressed={isActive}
                     >
@@ -718,7 +749,7 @@ export default function LajKetzHome(props: LajKetzHomeProps = {}) {
                       {isActive ? (
                         <motion.span
                           layoutId="lang-pill"
-                          className="absolute inset-0 rounded-full bg-[#2E8B57]"
+                          className="absolute inset-0 rounded-full bg-[#0A361E]"
                           transition={{ type: "spring", stiffness: 350, damping: 25 }}
                         />
                       ) : null}
@@ -730,7 +761,7 @@ export default function LajKetzHome(props: LajKetzHomeProps = {}) {
               <button
                 aria-label={darkToggleLabel}
                 onClick={() => setIsDark(!isDark)}
-                className="hidden rounded-full p-2 hover:bg-neutral-100 dark:hover:bg-white/10 lg:inline-flex"
+                className="hidden rounded-full p-2 text-[#0F2B1D] transition hover:bg-[#E9E6D4] dark:text-[#f0efe9] dark:hover:bg-white/10 lg:inline-flex"
                 type="button"
               >
                 {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
@@ -738,7 +769,7 @@ export default function LajKetzHome(props: LajKetzHomeProps = {}) {
 
               <Link
                 href="/subscribe"
-                className="hidden items-center gap-2 rounded-full bg-[#2E8B57] px-4 py-2 text-sm font-semibold text-white shadow-md shadow-[#2E8B57]/30 transition hover:bg-[#256b45] lg:inline-flex"
+                className="hidden items-center gap-2 rounded-full bg-[#0A361E] px-4 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-white shadow-md shadow-[#0A361E]/25 transition hover:bg-[#052812] lg:inline-flex"
               >
                 <Camera className="h-4 w-4" />
                 <span>{strings.headerSubscribe}</span>
@@ -752,19 +783,19 @@ export default function LajKetzHome(props: LajKetzHomeProps = {}) {
         <motion.section
           id="hero"
           ref={heroSectionRef}
-          className="relative overflow-hidden rounded-[40px] bg-[#04150c] text-white shadow-2xl ring-1 ring-[#6FBF73]/20 snap-start"
+          className="relative overflow-hidden rounded-[44px] bg-[#052812] text-white shadow-2xl ring-1 ring-[#1F5F3A]/20 snap-start"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, ease: "easeOut" }}
         >
           <motion.div
             className="absolute inset-0 bg-cover bg-center"
-            style={{
-              backgroundImage: `url(${defaultHeroBackground})`,
-              y: parallaxY,
-            }}
+            style={{ backgroundImage: `url(${defaultHeroBackground})`, y: parallaxY, scale: heroZoom }}
           />
-          <div className="absolute inset-0 bg-gradient-to-br from-[#04150c]/75 via-[#0f2b1d]/65 to-[#14402a]/55" />
+          <motion.div
+            className="absolute inset-0 bg-gradient-to-br from-[#04150c]/85 via-[#0b2617]/70 to-[#0A361E]/55"
+            style={{ clipPath: heroClipPath }}
+          />
           <motion.div
             className="pointer-events-none absolute -bottom-32 left-0 right-0 h-64 bg-[radial-gradient(circle,rgba(111,191,115,0.35)_0%,rgba(111,191,115,0)_70%)]"
             style={{ opacity: fogOpacity, y: fogY }}
@@ -780,7 +811,7 @@ export default function LajKetzHome(props: LajKetzHomeProps = {}) {
                 {strings.heroHighlight}
               </motion.span>
               <motion.h1
-                className="text-4xl font-black leading-tight sm:text-5xl lg:text-[3.2rem]"
+                className="font-display text-4xl font-semibold leading-[1.05] tracking-tight sm:text-5xl lg:text-[3.25rem]"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4, duration: 0.6 }}
@@ -789,7 +820,7 @@ export default function LajKetzHome(props: LajKetzHomeProps = {}) {
                   "La selva pierde 312 árboles por semana. Este es el panorama."}
               </motion.h1>
               <motion.p
-                className="text-base leading-relaxed text-white/80 sm:text-lg"
+                className="max-w-xl text-base leading-relaxed text-white/75 sm:text-lg"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5, duration: 0.6 }}
@@ -806,14 +837,14 @@ export default function LajKetzHome(props: LajKetzHomeProps = {}) {
                 <button
                   type="button"
                   onClick={() => scrollToSection("weekly-snapshot")}
-                  className="inline-flex items-center gap-2 rounded-full bg-[#6FBF73] px-5 py-3 text-sm font-semibold text-[#0F2B1D] shadow-lg shadow-[#6FBF73]/40 transition hover:bg-[#5aa762]"
+                  className="inline-flex items-center gap-2 rounded-full bg-[#E3E0C9] px-6 py-3 text-xs font-semibold uppercase tracking-[0.35em] text-[#0A361E] shadow-lg shadow-[#0A361E]/25 transition hover:bg-white/90"
                 >
                   {hero.ctaText ?? strings.heroPrimaryCta}
                 </button>
                 <button
                   type="button"
                   onClick={() => scrollToSection("partners")}
-                  className="inline-flex items-center gap-2 rounded-full border border-white/40 px-5 py-3 text-sm font-semibold text-white backdrop-blur transition hover:border-white hover:bg-white/10"
+                  className="inline-flex items-center gap-2 rounded-full border border-white/50 px-6 py-3 text-xs font-semibold uppercase tracking-[0.35em] text-white backdrop-blur transition hover:border-white hover:bg-white/10"
                 >
                   {strings.heroSecondaryCta}
                 </button>
@@ -846,41 +877,47 @@ export default function LajKetzHome(props: LajKetzHomeProps = {}) {
 
         <motion.section
           id="weekly-snapshot"
-          className="snap-start rounded-[32px] bg-white p-10 shadow-xl shadow-[#2E8B57]/10 ring-1 ring-[#6FBF73]/15 dark:bg-[#03160d]"
+          className="snap-start rounded-[36px] bg-white p-12 shadow-xl shadow-[#0A361E]/10 ring-1 ring-[#1F5F3A]/15 dark:bg-[#03160d]"
           variants={sectionVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.3 }}
         >
-          <div className="space-y-8">
-            <div className="space-y-2">
-              <h2 className="text-3xl font-bold text-[#0F2B1D] dark:text-[#f0efe9]">
+          <div className="space-y-10">
+            <div className="space-y-3">
+              <span className="text-xs font-semibold uppercase tracking-[0.4em] text-[#1F5F3A]">
                 {strings.weeklySnapshot.title}
-              </h2>
-              <p className="text-sm text-neutral-600 dark:text-neutral-400">
+              </span>
+              <h2 className="font-display text-3xl font-semibold text-[#0F2B1D] sm:text-4xl dark:text-[#f0efe9]">
                 {strings.weeklySnapshot.subtitle}
-              </p>
+              </h2>
             </div>
-            <TimelineStrip
-              timeline={timelineHighlights}
-              language={language}
-            />
-            <div className="grid gap-6 md:grid-cols-3">
-              {snapshotMetrics.map((metric, index) => (
-                <SnapshotMetricCard
-                  key={metric.id ?? metric.label}
-                  metric={metric}
-                  index={index}
+
+            <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr]">
+              <div className="space-y-6">
+                <TimelineStrip
+                  timeline={timelineHighlights}
+                  language={language}
                 />
-              ))}
+                <button
+                  type="button"
+                  onClick={() => scrollToSection("weekly-analysis")}
+                  className="text-xs font-semibold uppercase tracking-[0.35em] text-[#0A361E] transition hover:text-[#052812]"
+                >
+                  {strings.weeklySnapshot.seeAll}
+                </button>
+              </div>
+
+              <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-1">
+                {snapshotMetrics.map((metric, index) => (
+                  <SnapshotMetricCard
+                    key={metric.id ?? metric.label}
+                    metric={metric}
+                    index={index}
+                  />
+                ))}
+              </div>
             </div>
-            <button
-              type="button"
-              onClick={() => scrollToSection("weekly-analysis")}
-              className="inline-flex items-center text-sm font-semibold text-[#2E8B57] transition hover:text-[#256b45]"
-            >
-              {strings.weeklySnapshot.seeAll}
-            </button>
           </div>
         </motion.section>
 
@@ -898,41 +935,99 @@ export default function LajKetzHome(props: LajKetzHomeProps = {}) {
             action={
               <Link
                 href="/blog"
-                className="inline-flex items-center gap-2 rounded-full border border-[#2E8B57]/30 px-4 py-2 text-sm font-semibold text-[#2E8B57] transition hover:border-[#2E8B57] hover:bg-[#2E8B57]/10 dark:border-[#6FBF73]/30 dark:text-[#6FBF73] dark:hover:border-[#6FBF73] dark:hover:bg-[#6FBF73]/10"
+                className="inline-flex items-center gap-2 rounded-full border border-[#0A361E]/30 px-5 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-[#0A361E] transition hover:border-[#0A361E] hover:bg-[#0A361E]/10 dark:border-[#1F5F3A]/30 dark:text-[#1F5F3A] dark:hover:border-[#1F5F3A] dark:hover:bg-[#1F5F3A]/10"
               >
                 {strings.postsSection.seeAll}
               </Link>
             }
           />
-          <span className="inline-flex w-fit items-center gap-2 rounded-full bg-[#2E8B57]/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.25em] text-[#2E8B57]">
-            {strings.postsSection.tag}
-          </span>
-          <div className="flex flex-col gap-8">
-            <div className="flex flex-1 gap-6 overflow-x-auto pb-2 md:snap-x md:snap-mandatory lg:overflow-visible">
-              {posts.length > 0 ? (
-                posts.map((post, idx) => (
-                  <PostCard
-                    key={post?.id ?? `post-${idx}`}
-                    post={post ?? {}}
-                    strings={strings}
-                    language={language}
-                  />
-                ))
-              ) : (
-                <div className="min-w-full">
-                  <EmptyCard message={strings.empty.posts} />
-                </div>
-              )}
-            </div>
-            <div className="space-y-3">
-              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#2E8B57]">
-                {strings.vlogSection.badge}
-              </p>
-              {videos.length > 0 ? (
-                <VideoCard video={videos[0] ?? {}} strings={strings} />
-              ) : (
-                <EmptyCard message={strings.vlogSection.empty} />
-              )}
+          <div className="space-y-12">
+            {featuredPosts.length > 0 ? (
+              featuredPosts.map((post, idx) => {
+                const isEven = idx % 2 === 0;
+                const dateDisplay = post.date
+                  ? new Date(post.date).toLocaleDateString(language === "es" ? "es-GT" : "en-US", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })
+                  : "";
+
+                return (
+                  <motion.article
+                    key={post.id ?? `post-${idx}`}
+                    className={`group grid gap-8 rounded-[36px] bg-white/80 p-8 shadow-lg shadow-[#0A361E]/10 ring-1 ring-[#1F5F3A]/15 backdrop-blur dark:bg-[#04150c] md:grid-cols-[minmax(0,1.2fr),minmax(0,0.8fr)]`}
+                    initial={{ opacity: 0, y: 36 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, amount: 0.4 }}
+                    transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+                  >
+                    <motion.div
+                      className={`relative overflow-hidden rounded-[32px] bg-[#0A361E]/10 ${isEven ? "" : "md:order-2"}`}
+                      whileHover={{ scale: 1.02 }}
+                      transition={{ type: "spring", stiffness: 200, damping: 25 }}
+                    >
+                      <Image
+                        src={
+                          post.image ??
+                          "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1600&q=80"
+                        }
+                        alt={post.title ?? "Story"}
+                        fill
+                        className="object-cover transition duration-700 group-hover:scale-105"
+                        sizes="(max-width: 768px) 100vw, 50vw"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#0A361E]/60 via-transparent to-transparent opacity-70" />
+                    </motion.div>
+
+                    <div className={`flex flex-col justify-between gap-6 ${isEven ? "" : "md:order-1"}`}>
+                      <div className="space-y-4">
+                        <span className="inline-flex items-center rounded-full bg-[#E3E0C9] px-3 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.35em] text-[#0A361E]">
+                          {strings.postsSection.tag}
+                        </span>
+                        <h3 className="font-display text-3xl font-semibold leading-tight text-[#0F2B1D] transition group-hover:text-[#0A361E] dark:text-[#f0efe9]">
+                          {post.title ?? "Sin título"}
+                        </h3>
+                        <p className="text-sm leading-relaxed text-neutral-600 dark:text-neutral-300">
+                          {post.excerpt ?? strings.postsSection.subtitle}
+                        </p>
+                      </div>
+                      <div className="flex flex-col gap-4 text-sm text-neutral-500 dark:text-neutral-400">
+                        <div className="flex flex-wrap items-center gap-4 uppercase tracking-[0.35em] text-[#1F5F3A]">
+                          <span>{post.author ?? "Laj Ketz"}</span>
+                          {dateDisplay ? <span>• {dateDisplay}</span> : null}
+                        </div>
+                        <Link
+                          href={post.slug ? `/blog/${post.slug}` : "#"}
+                          className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.35em] text-[#0A361E] transition hover:gap-3 hover:text-[#052812]"
+                        >
+                          {strings.postsSection.readMore}
+                        </Link>
+                      </div>
+                    </div>
+                  </motion.article>
+                );
+              })
+            ) : (
+              <EmptyCard message={strings.empty.posts} />
+            )}
+
+            <div className="grid gap-6 rounded-[36px] bg-[#F3F0E0] p-8 shadow-inner shadow-[#0A361E]/5 ring-1 ring-[#1F5F3A]/10 md:grid-cols-[0.9fr,1.1fr]">
+              <div className="space-y-3">
+                <p className="text-[0.65rem] font-semibold uppercase tracking-[0.4em] text-[#1F5F3A]">
+                  {strings.vlogSection.badge}
+                </p>
+                <h3 className="font-display text-2xl font-semibold text-[#0F2B1D] dark:text-[#f0efe9]">
+                  {strings.vlogSection.title}
+                </h3>
+              </div>
+              <div className="flex flex-col gap-4">
+                {videos.length > 0 ? (
+                  <VideoCard video={videos[0] ?? {}} strings={strings} />
+                ) : (
+                  <EmptyCard message={strings.vlogSection.empty} />
+                )}
+              </div>
             </div>
           </div>
         </motion.section>
@@ -965,8 +1060,52 @@ export default function LajKetzHome(props: LajKetzHomeProps = {}) {
         </motion.section>
 
         <motion.section
+          id="purpose"
+          className="snap-start overflow-hidden rounded-[40px] bg-gradient-to-br from-[#E3E0C9] via-[#F6F3E4] to-white p-12 shadow-lg shadow-[#0A361E]/5 ring-1 ring-[#1F5F3A]/10"
+          variants={sectionVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
+        >
+          <div className="grid gap-12 lg:grid-cols-[1.1fr,0.9fr]">
+            <div className="space-y-6">
+              <span className="text-[0.65rem] font-semibold uppercase tracking-[0.4em] text-[#1F5F3A]">
+                Laj Ketz
+              </span>
+              <h2 className="font-display text-3xl font-semibold text-[#0F2B1D] sm:text-[2.6rem]">
+                Narrativas desde la selva para quienes la protegen.
+              </h2>
+              <p className="text-sm leading-relaxed text-neutral-600">
+                Cada semana conectamos señales satelitales, bitácoras comunitarias y
+                archivos audiovisuales para iluminar la salud climática de la
+                Selva Maya. Abrimos historias que orientan incidencia, turismo
+                regenerativo y acciones inmediatas en los territorios donde el bosque
+                respira.
+              </p>
+            </div>
+            <div className="space-y-5 rounded-[32px] border border-[#1F5F3A]/10 bg-white/80 p-6 shadow-inner shadow-[#0A361E]/10 backdrop-blur">
+              <h3 className="font-display text-xl font-semibold text-[#0F2B1D]">
+                Cómo trabajamos
+              </h3>
+              <ul className="space-y-3 text-sm text-neutral-600">
+                <li>• Corremos verificaciones en campo con brigadas juveniles.</li>
+                <li>• Traducimos datasets complejos en relatos accionables.</li>
+                <li>• Facilitamos alianzas con medios, escuelas y redes indígenas.</li>
+              </ul>
+              <button
+                type="button"
+                onClick={() => scrollToSection("partners")}
+                className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.35em] text-[#0A361E] transition hover:gap-3 hover:text-[#052812]"
+              >
+                {strings.partnersSection.cta}
+              </button>
+            </div>
+          </div>
+        </motion.section>
+
+        <motion.section
           id="partners"
-          className="snap-start rounded-[32px] bg-white p-10 shadow-xl shadow-[#2E8B57]/10 ring-1 ring-[#6FBF73]/15 dark:bg-[#03160d]"
+          className="snap-start rounded-[32px] bg-white p-10 shadow-xl shadow-[#0A361E]/10 ring-1 ring-[#1F5F3A]/15 dark:bg-[#03160d]"
           variants={sectionVariants}
           initial="hidden"
           whileInView="visible"
@@ -988,7 +1127,7 @@ export default function LajKetzHome(props: LajKetzHomeProps = {}) {
             </p>
             <Link
               href="/get-involved"
-              className="inline-flex items-center gap-2 rounded-full bg-[#2E8B57] px-5 py-3 text-sm font-semibold text-white shadow-md shadow-[#2E8B57]/30 transition hover:bg-[#256b45]"
+              className="inline-flex items-center gap-2 rounded-full bg-[#0A361E] px-5 py-3 text-sm font-semibold text-white shadow-md shadow-[#0A361E]/30 transition hover:bg-[#052812]"
             >
               {strings.partnersSection.cta}
             </Link>
@@ -998,10 +1137,15 @@ export default function LajKetzHome(props: LajKetzHomeProps = {}) {
 
       <footer className="mt-12 border-t border-neutral-200 py-8 dark:border-white/5">
         <div className={`${CONTAINER_CLASSES} flex flex-col items-center justify-between gap-4 text-sm text-neutral-600 dark:text-neutral-400 md:flex-row`}>
-          <p>{footerCopy}</p>
+          <div className="flex flex-col items-center gap-2 text-center md:items-start md:text-left">
+            <p>{footerCopy}</p>
+            <span className="text-[0.65rem] font-semibold uppercase tracking-[0.35em] text-[#1F5F3A]">
+              Crafted by Nitron Digital
+            </span>
+          </div>
           <div className="flex items-center gap-4">
             {footerLinks.map((link) => (
-              <Link key={link.href} href={link.href} className="hover:text-[#2E8B57]">
+              <Link key={link.href} href={link.href} className="hover:text-[#0A361E]">
                 {link.label}
               </Link>
             ))}
@@ -1030,7 +1174,7 @@ function HeroStatCard({
   const delay = 0.2 + index * 0.1;
   return (
     <motion.div
-      className="rounded-2xl border border-white/20 bg-white/5 p-4 text-white shadow-lg shadow-black/20"
+      className="rounded-[28px] border border-white/25 bg-white/10 p-5 text-white shadow-lg shadow-black/20 backdrop-blur"
       initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.4 }}
@@ -1039,10 +1183,12 @@ function HeroStatCard({
       <p className="text-xs font-semibold uppercase tracking-[0.3em] text-white/70">
         {label}
       </p>
-      <div className="mt-2 flex items-baseline gap-2 text-2xl font-bold">
+      <div className="mt-3 flex items-baseline gap-2 font-display text-3xl font-semibold tracking-tight">
         <AnimatedCounter value={value} language={language} />
         {suffix ? (
-          <span className="text-sm font-semibold text-white/70">{suffix}</span>
+          <span className="text-xs font-semibold uppercase tracking-[0.35em] text-white/70">
+            {suffix}
+          </span>
         ) : null}
       </div>
     </motion.div>
@@ -1097,7 +1243,7 @@ function TimelineStrip({ timeline, language }: TimelineStripProps) {
   }
   return (
     <motion.div
-      className="grid gap-4 rounded-[28px] bg-[#0F2B1D] p-6 text-[#F7F1E6] shadow-lg shadow-[#0F2B1D]/40 sm:grid-cols-3"
+      className="grid gap-4 rounded-[32px] bg-[#F3F0E0] p-6 text-[#0F2B1D] shadow-lg shadow-[#0A361E]/10 sm:grid-cols-3"
       initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.3 }}
@@ -1112,19 +1258,21 @@ function TimelineStrip({ timeline, language }: TimelineStripProps) {
         return (
           <div
             key={`${item.label}-${item.change}`}
-            className="flex flex-col gap-2 rounded-2xl bg-white/10 px-4 py-3 text-sm shadow-sm"
+            className="flex flex-col gap-3 rounded-2xl border border-[#1F5F3A]/15 bg-white px-4 py-4 text-sm shadow-sm shadow-[#0A361E]/5"
           >
             <div className="flex items-center justify-between">
-              <span className="font-semibold">{item.label}</span>
-              <span className={`text-base font-bold ${variant.text}`}>
+              <span className="font-display text-base font-semibold">
+                {item.label}
+              </span>
+              <span className={`text-lg font-bold ${variant.text}`}>
                 {variant.icon}
               </span>
             </div>
-            <span className={`text-xs font-semibold ${variant.text}`}>
+            <span className={`text-xs font-semibold uppercase tracking-[0.35em] ${variant.text}`}>
               {item.change}
             </span>
             {language === "es" ? (
-              <span className="text-xs text-[#F7F1E6]/70">
+              <span className="text-xs text-neutral-500">
                 {directionLabelEs(direction)}
               </span>
             ) : null}
@@ -1145,7 +1293,7 @@ function SnapshotMetricCard({ metric, index }: SnapshotMetricCardProps) {
   const variant = SNAPSHOT_VARIANTS[direction];
   return (
     <motion.div
-      className="group flex h-full flex-col gap-4 rounded-2xl bg-[#F7F1E6] p-6 shadow-lg shadow-[#2E8B57]/10 ring-1 ring-[#6FBF73]/20 transition dark:bg-[#04150c]"
+      className="group flex h-full flex-col gap-4 rounded-[28px] bg-white/90 p-6 shadow-lg shadow-[#0A361E]/10 ring-1 ring-[#1F5F3A]/15 transition dark:bg-[#04150c]"
       initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.3 }}
@@ -1188,7 +1336,7 @@ function PartnersCarousel({
 }: PartnersCarouselProps & { emptyLabel: string }) {
   if (!partners.length) {
     return (
-      <div className="rounded-2xl border border-dashed border-[#6FBF73]/30 bg-white/80 p-6 text-sm text-neutral-500 dark:border-[#6FBF73]/40 dark:bg-white/5">
+      <div className="rounded-2xl border border-dashed border-[#1F5F3A]/30 bg-white/80 p-6 text-sm text-neutral-500 dark:border-[#1F5F3A]/40 dark:bg-white/5">
         {emptyLabel}
       </div>
     );
@@ -1198,7 +1346,7 @@ function PartnersCarousel({
     partners.length >= 4 ? [...partners, ...partners] : [...partners, ...partners, ...partners];
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-[#6FBF73]/20 bg-white/70 p-4 dark:border-[#6FBF73]/25 dark:bg-[#04150c]">
+    <div className="overflow-hidden rounded-2xl border border-[#1F5F3A]/20 bg-white/70 p-4 dark:border-[#1F5F3A]/25 dark:bg-[#04150c]">
       <motion.div
         className="flex items-center gap-8"
         animate={{ x: ["0%", "-50%"] }}
@@ -1207,7 +1355,7 @@ function PartnersCarousel({
         {marqueePartners.map((partner, idx) => {
           const key = `${partner?.name ?? "partner"}-${idx}`;
           const content = (
-            <div className="flex min-w-[160px] items-center gap-3 rounded-xl border border-[#6FBF73]/20 bg-white/90 px-5 py-3 shadow-sm transition hover:border-[#2E8B57]/60 hover:shadow-md dark:border-[#6FBF73]/30 dark:bg-[#04150c] dark:hover:border-[#6FBF73]/60">
+            <div className="flex min-w-[160px] items-center gap-3 rounded-xl border border-[#1F5F3A]/20 bg-white/90 px-5 py-3 shadow-sm transition hover:border-[#0A361E]/60 hover:shadow-md dark:border-[#1F5F3A]/30 dark:bg-[#04150c] dark:hover:border-[#1F5F3A]/60">
               {partner?.logo ? (
                 <Image
                   src={partner.logo}
@@ -1258,93 +1406,19 @@ type SectionHeaderProps = {
 
 function SectionHeader({ title, subtitle, action }: SectionHeaderProps) {
   return (
-    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-      <div>
-        <h2 className="text-2xl font-bold text-[#0F2B1D] dark:text-[#f0efe9]">
+    <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+      <div className="space-y-2">
+        <h2 className="font-display text-3xl font-semibold text-[#0F2B1D] dark:text-[#f0efe9]">
           {title}
         </h2>
         {subtitle ? (
-          <p className="text-sm text-neutral-600 dark:text-neutral-400">
+          <p className="max-w-2xl text-sm leading-relaxed text-neutral-600 dark:text-neutral-400">
             {subtitle}
           </p>
         ) : null}
       </div>
       {action ? <div className="flex-shrink-0">{action}</div> : null}
     </div>
-  );
-}
-
-type PostCardProps = {
-  post: PostData;
-  strings: UIStrings;
-  language: LanguageKey;
-};
-
-function PostCard({
-  post = {} as PostData,
-  strings,
-  language,
-}: PostCardProps) {
-  const title = post?.title ?? "Untitled";
-  const excerpt = post?.excerpt ?? "";
-  const slug = post?.slug ?? "";
-  const image = post?.image ?? null;
-  const author = post?.author ?? "Laj Ketz";
-  const locale = language === "es" ? "es-GT" : "en-US";
-  const dateDisplay =
-    post?.date != null
-      ? (() => {
-          try {
-            return new Date(post.date).toLocaleDateString(locale, {
-              year: "numeric",
-              month: "short",
-              day: "numeric",
-            });
-          } catch (error) {
-            console.warn("Invalid date value provided to PostCard", error);
-            return "";
-          }
-        })()
-      : "";
-
-  return (
-    <motion.article
-      className="group min-w-[260px] overflow-hidden rounded-2xl bg-white shadow-lg shadow-[#2E8B57]/10 ring-1 ring-[#6FBF73]/20 transition dark:bg-[#04150c] md:snap-center"
-      whileHover={{ y: -8, scale: 1.01 }}
-      transition={{ type: "spring", stiffness: 220, damping: 20 }}
-    >
-      <Link href={slug ? `/blog/${slug}` : "#"} className="block">
-        <div className="relative h-48 w-full overflow-hidden">
-          {image ? (
-            <Image
-              src={image}
-              alt={title}
-              fill
-              sizes="(min-width: 768px) 50vw, 90vw"
-              className="object-cover transition duration-500 group-hover:scale-105"
-            />
-          ) : (
-            <div className="h-full w-full bg-neutral-100 dark:bg-white/10" />
-          )}
-        </div>
-
-        <div className="space-y-3 px-6 pb-6 pt-5">
-          <h3 className="text-lg font-semibold leading-tight text-[#0F2B1D] transition group-hover:text-[#2E8B57] dark:text-[#f0efe9]">
-            {title}
-          </h3>
-          <p className="text-sm text-neutral-600 dark:text-neutral-300">
-            {excerpt}
-          </p>
-          <div className="flex items-center justify-between text-xs text-neutral-500 dark:text-neutral-400">
-            <span>{author}</span>
-            <span>{dateDisplay}</span>
-          </div>
-          <span className="inline-flex items-center text-sm font-semibold text-[#2E8B57]">
-            {strings.postsSection.readMore}
-          </span>
-        </div>
-      </Link>
-    </motion.article>
   );
 }
 
@@ -1392,10 +1466,10 @@ function VideoCard({ video = {} as VideoData, strings }: VideoCardProps) {
   return (
     <motion.div
       ref={containerRef}
-      className="overflow-hidden rounded-2xl bg-white shadow-lg shadow-[#2E8B57]/10 ring-1 ring-[#6FBF73]/20 transition hover:-translate-y-1 dark:bg-[#04150c]"
+      className="overflow-hidden rounded-[32px] bg-white/90 shadow-lg shadow-[#0A361E]/10 ring-1 ring-[#1F5F3A]/15 transition duration-500 hover:-translate-y-1 hover:shadow-xl dark:bg-[#04150c]"
       whileHover={{ y: -6 }}
     >
-      <div className="relative h-48 w-full overflow-hidden">
+      <div className="relative h-56 w-full overflow-hidden">
         {preview ? (
           <video
             ref={videoRef}
@@ -1421,19 +1495,21 @@ function VideoCard({ video = {} as VideoData, strings }: VideoCardProps) {
         ) : (
           <div className="h-full w-full bg-neutral-100 dark:bg-white/10" />
         )}
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-black/0" />
-        <div className="absolute bottom-3 left-3 flex items-center gap-2 rounded-full bg-black/50 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white">
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0A361E]/70 via-black/15 to-transparent" />
+        <div className="absolute bottom-3 left-3 flex items-center gap-2 rounded-full bg-[#0A361E]/85 px-3 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.35em] text-white">
           {strings.vlogSection.badge}
         </div>
       </div>
-      <div className="space-y-3 px-5 pb-6 pt-5">
-        <h4 className="text-lg font-semibold text-[#0F2B1D] dark:text-[#f0efe9]">
+      <div className="space-y-4 px-6 pb-7 pt-6">
+        <h4 className="font-display text-2xl font-semibold text-[#0F2B1D] dark:text-[#f0efe9]">
           {title}
         </h4>
-        <p className="text-sm text-neutral-600 dark:text-neutral-300">{excerpt}</p>
+        <p className="text-sm leading-relaxed text-neutral-600 dark:text-neutral-300">
+          {excerpt}
+        </p>
         <Link
           href={url}
-          className="inline-flex items-center text-sm font-semibold text-[#2E8B57] transition hover:text-[#256b45]"
+          className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.35em] text-[#0A361E] transition hover:gap-3 hover:text-[#052812]"
         >
           {strings.vlogSection.watchCta}
         </Link>
@@ -1457,19 +1533,21 @@ function AnalysisCard({
   const slug = analysis?.slug ?? "";
 
   return (
-    <article className="flex h-full flex-col justify-between rounded-2xl bg-white p-6 shadow-lg shadow-[#2E8B57]/10 ring-1 ring-[#6FBF73]/20 transition hover:-translate-y-1 dark:bg-[#04150c]">
-      <div className="space-y-3">
-        <p className="text-xs font-semibold uppercase tracking-wide text-[#2E8B57]/70 dark:text-[#6FBF73]">
+    <article className="flex h-full flex-col justify-between rounded-[32px] bg-white/90 p-7 shadow-lg shadow-[#0A361E]/10 ring-1 ring-[#1F5F3A]/15 transition duration-500 hover:-translate-y-1 hover:shadow-xl dark:bg-[#04150c]">
+      <div className="space-y-4">
+        <p className="text-[0.65rem] font-semibold uppercase tracking-[0.35em] text-[#1F5F3A]">
           {range}
         </p>
-        <h3 className="text-lg font-semibold text-[#0F2B1D] dark:text-[#f0efe9]">
+        <h3 className="font-display text-2xl font-semibold leading-tight text-[#0F2B1D] dark:text-[#f0efe9]">
           {title}
         </h3>
-        <p className="text-sm text-neutral-600 dark:text-neutral-300">{summary}</p>
+        <p className="text-sm leading-relaxed text-neutral-600 dark:text-neutral-300">
+          {summary}
+        </p>
       </div>
       <Link
         href={slug ? `/analysis/${slug}` : "#"}
-        className="mt-6 inline-flex items-center text-sm font-semibold text-[#2E8B57] transition hover:text-[#256b45]"
+        className="mt-6 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.35em] text-[#0A361E] transition hover:gap-3 hover:text-[#052812]"
       >
         {strings.analysisSection.readMore}
       </Link>
@@ -1483,7 +1561,7 @@ type EmptyCardProps = {
 
 function EmptyCard({ message }: EmptyCardProps) {
   return (
-    <div className="rounded-2xl border border-dashed border-[#2E8B57]/30 bg-white/70 p-6 text-sm text-neutral-500 dark:border-[#6FBF73]/40 dark:bg-white/5">
+    <div className="rounded-2xl border border-dashed border-[#0A361E]/30 bg-white/70 p-6 text-sm text-neutral-500 dark:border-[#1F5F3A]/40 dark:bg-white/5">
       {message}
     </div>
   );

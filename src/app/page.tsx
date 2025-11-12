@@ -262,26 +262,22 @@ const FALLBACK_ANALYSIS_SUMMARY_EN =
 const partnerLogos = [
   {
     name: "WCS Guatemala",
-    logo:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/WCS_logo.svg/512px-WCS_logo.svg.png",
+    logo: "https://logo.clearbit.com/wcs.org",
     url: "https://guatemala.wcs.org/",
   },
   {
     name: "Rainforest Alliance",
-    logo:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Rainforest_Alliance_logo.svg/512px-Rainforest_Alliance_logo.svg.png",
+    logo: "https://logo.clearbit.com/rainforest-alliance.org",
     url: "https://www.rainforest-alliance.org/",
   },
   {
     name: "CONAP Guatemala",
-    logo:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/CONAP_logo.svg/512px-CONAP_logo.svg.png",
+    logo: "https://logo.clearbit.com/conap.gob.gt",
     url: "https://www.conap.gob.gt/",
   },
   {
     name: "WWF Mesoamérica",
-    logo:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/WWF_logo.svg/512px-WWF_logo.svg.png",
+    logo: "https://logo.clearbit.com/wwf.org",
     url: "https://www.wwfca.org/",
   },
 ];
