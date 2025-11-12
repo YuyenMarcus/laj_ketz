@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { PortableText, PortableTextComponents } from "@portabletext/react";
+import BlogPDF from "../../../components/BlogPDF";
 import { getBlogBySlug } from "../../../../lib/getBlogBySlug";
 
 export const dynamic = "force-dynamic";
@@ -92,9 +93,12 @@ const components: PortableTextComponents = {
 
 export default async function BlogPostPage({ params }: BlogPageProps) {
   const { slug } = await params;
+  console.log("🔍 Fetching blog by slug:", slug);
   const blog = await getBlogBySlug(slug);
+  console.log("🧠 Blog data returned:", blog);
 
-  if (!blog) {
+  if (!blog || !blog.title) {
+    console.error("❌ Blog missing, triggering notFound");
     notFound();
   }
 
@@ -174,13 +178,7 @@ export default async function BlogPostPage({ params }: BlogPageProps) {
           <h2 className="text-lg font-semibold text-[#0F2B1D] dark:text-[#f0efe9]">
             Vista previa del documento
           </h2>
-          <div className="aspect-[3/4] w-full overflow-hidden rounded-2xl border border-[#6FBF73]/20 bg-neutral-50 dark:bg-white/5">
-            <iframe
-              src={`${pdfUrl}#view=FitH`}
-              title={blog.title}
-              className="h-full w-full"
-            />
-          </div>
+          <BlogPDF pdfUrl={pdfUrl} />
         </div>
       ) : null}
 
